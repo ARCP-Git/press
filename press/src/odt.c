@@ -134,7 +134,7 @@ static void print_odt_text_block(file f, const char* text)
 		}
 		else
 		{
-			print_char(f, *text);
+			print_char_token(f, *text);
 		}
 
 		++text;
