@@ -20,7 +20,7 @@ static void print_html_text_block(html_context* ctx, const char* text)
 		}
 		else if (*text == text_token_type_note)
 		{
-			const uint32_t note_count = ctx->inline_note_count++ + 1;
+			const uint32_t note_count = ++ctx->inline_note_count;
 			const uint32_t chapter_note_count = ctx->inline_chapter_note_count++;
 
 			const document_chapter* chapter = &ctx->doc->chapters[ctx->chapter_index];
@@ -76,22 +76,38 @@ static const char* generate_url_path(const char* title, const char* ext)
 
 	// Normalise title to a web-safe filename
 	const char* title_begin = current;
+
+	char p = 0;
 	for (;;)
 	{
 		const char c = *title++;
 
 		if (c >= 'a' && c <= 'z')
-			*current++ = c;
+		{
+			p = *current++ = c;
+		}
 		else if (c >= 'A' && c <= 'Z')
-			*current++ = c + 32;
+		{
+			p = *current++ = c + 32; // Make lowercase
+		}
 		else if (c == '.')
-			*current++ = '.';
+		{
+			p = *current++ = '.';
+		}
 		else if (c == '-')
-			*current++ = '-';
+		{
+			if (p != '-')
+				p = *current++ = '-';
+		}
 		else if (c == ' ')
-			*current++ = '-';
+		{
+			if (p != '-')
+				p = *current++ = '-';
+		}
 		else if (c == 0)
+		{
 			break;
+		}
 	}
 
 	// Add extension

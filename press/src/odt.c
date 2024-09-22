@@ -81,6 +81,13 @@ static void create_odt_styles(void)
 		"\t\t<style:style style:name=\"Strong\" style:family=\"text\">\n"
 		"\t\t\t<style:text-properties fo:font-weight=\"bold\"/>\n"
 		"\t\t</style:style>\n"
+		"\t\t<style:style style:name=\"Footnote\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"extra\">\n"
+		"\t\t\t<style:paragraph-properties fo:margin-left=\"0.5cm\" fo:text-align=\"justify\" style:justify-single-word=\"false\" fo:text-indent=\"-0.5cm\"/>\n"
+		"\t\t\t<style:text-properties fo:font-size=\"10pt\"/>\n"
+		"\t\t</style:style>\n"
+		"\t\t<style:style style:name=\"Footnote_Indent\" style:display-name=\"Footnote Indent\" style:family=\"paragraph\" style:parent-style-name=\"Footnote\" style:class=\"extra\">\n"
+		"\t\t\t<style:paragraph-properties fo:text-indent=\"0.5cm\"/>\n"
+		"\t\t</style:style>\n"
 		"\t</office:styles>\n"
 		"\t<office:automatic-styles>\n"
 		"\t\t<style:page-layout style:name=\"Letter\">\n"
@@ -103,41 +110,86 @@ static void create_odt_styles(void)
 	close_file(f);
 }
 
-static void print_odt_text_block(file f, const char* text)
+static void print_odt_char(html_context* ctx, char c)
+{
+	if (c == '&')
+		print_str(ctx->f, "&amp;"); // Ampersand is a special character in HTML
+	else if (c == text_token_type_strong_begin)
+		print_str(ctx->f, "<text:span text:style-name=\"Strong\">");
+	else if (c == text_token_type_strong_end)
+		print_str(ctx->f, "</text:span>");
+	else if (c == text_token_type_emphasis_begin)
+		print_str(ctx->f, "<text:span text:style-name=\"Emphasis\">");
+	else if (c == text_token_type_emphasis_end)
+		print_str(ctx->f, "</text:span>");
+	else
+		print_char_token(ctx->f, c);
+}
+
+static void print_simple_odt_text(html_context* ctx, const char* text)
+{
+	while (*text)
+		print_odt_char(ctx, *text++);
+}
+
+static void print_odt_text_block(html_context* ctx, const char* text)
 {
 	while (*text)
 	{
-		if (*text == text_token_type_strong_begin)
+		if (*text == text_token_type_note)
 		{
-			print_str(f, "<text:span text:style-name=\"Strong\">");
-		}
-		else if (*text == text_token_type_strong_end)
-		{
-			print_str(f, "</text:span>");
-		}
-		else if (*text == text_token_type_emphasis_begin)
-		{
-			print_str(f, "<text:span text:style-name=\"Emphasis\">");
-		}
-		else if (*text == text_token_type_emphasis_end)
-		{
-			print_str(f, "</text:span>");
-		}
-		else if (*text == text_token_type_note)
-		{
-//			const uint32_t ref_count = ctx->inline_ref_count++ + 1;
-//			const uint32_t chapter_ref_count = ctx->inline_chapter_ref_count++;
-//
-//			const document_chapter* chapter = &ctx->doc->chapters[ctx->chapter_index];
-//			const document_reference* reference = &chapter->references[chapter_ref_count];
-//
-//			fprintf(ctx->f, "<sup><a id=\"ref-return%d\" href=\"#ref%d\" title=\"", ref_count, ref_count);
-//			print_simple_text(ctx->f, reference->text);
-//			fprintf(ctx->f, "\">[%d]</a></sup>", chapter_ref_count + 1);
+			const uint32_t note_count = ++ctx->inline_note_count;
+			const uint32_t chapter_note_count = ctx->inline_chapter_note_count++;
+
+			const document_chapter* chapter = &ctx->doc->chapters[ctx->chapter_index];
+			const document_note* note = &chapter->notes[chapter_note_count];
+
+			print_fmt(ctx->f, "\n"
+				"				<text:note text:id=\"ftn%d\" text:note-class=\"footnote\">\n"
+				"					<text:note-citation>%d</text:note-citation>\n"
+				"					<text:note-body>\n",
+				note_count,
+				note_count
+			);
+
+			int paragraph_count = 0;
+
+			for (uint32_t element_index = 0; element_index < note->element_count; ++element_index)
+			{
+				document_element* element = &note->elements[element_index];
+
+				switch (element->type)
+				{
+				case document_element_type_text_block:
+					print_simple_odt_text(ctx, element->text);
+					break;
+				case document_element_type_line_break:
+					print_str(ctx->f, "<text:line-break/>");
+					break;
+				case document_element_type_paragraph_begin:
+				case document_element_type_paragraph_break_begin:
+					++paragraph_count;
+
+					if (paragraph_count == 1)
+						print_str(ctx->f, "\t\t\t\t\t\t<text:p text:style-name=\"Footnote\">");
+					else
+						print_str(ctx->f, "\t\t\t\t\t\t<text:p text:style-name=\"Footnote_Indent\">");
+					break;
+				case document_element_type_paragraph_end:
+					print_str(ctx->f, "</text:p>\n");
+					break;
+				}
+			}
+
+			print_str(ctx->f,
+				"					</text:note-body>\n"
+				"				</text:note>\n"
+			);
+			
 		}
 		else
 		{
-			print_char_token(f, *text);
+			print_odt_char(ctx, *text);
 		}
 
 		++text;
@@ -234,7 +286,7 @@ static void generate_odt_content(const document* doc)
 
 				print_tabs(f, depth);
 				print_str(f, "<text:h text:style-name=\"Heading_1\" text:outline-level=\"1\">");
-				print_odt_text_block(f, element->text);
+				print_odt_text_block(&ctx, element->text);
 				print_str(f, "</text:h>");
 				break;
 			case document_element_type_heading_2:
@@ -242,7 +294,7 @@ static void generate_odt_content(const document* doc)
 
 				print_tabs(f, depth);
 				print_str(f, "<text:h text:style-name=\"Heading_2\" text:outline-level=\"2\">");
-				print_odt_text_block(f, element->text);
+				print_odt_text_block(&ctx, element->text);
 				print_str(f, "</text:h>");
 				break;
 			case document_element_type_heading_3:
@@ -250,11 +302,11 @@ static void generate_odt_content(const document* doc)
 
 				print_tabs(f, depth);
 				print_str(f, "<text:h text:style-name=\"Heading_3\" text:outline-level=\"3\">");
-				print_odt_text_block(f, element->text);
+				print_odt_text_block(&ctx, element->text);
 				print_str(f, "</text:h>");
 				break;
 			case document_element_type_text_block:
-				print_odt_text_block(f, element->text);
+				print_odt_text_block(&ctx, element->text);
 				break;
 			case document_element_type_line_break:
 				print_str(f, "<text:line-break/>");
@@ -306,7 +358,7 @@ static void generate_odt_content(const document* doc)
 				print_tabs(f, depth);
 				print_str(f, "<text:p text:style-name=\"Blockquote_Citation\">");
 				print_em_dash(f);
-				print_odt_text_block(f, element->text);
+				print_odt_text_block(&ctx, element->text);
 				print_str(f, "</text:p>");
 				break;
 			case document_element_type_right_aligned_begin:
@@ -343,21 +395,6 @@ static void generate_odt_content(const document* doc)
 //				break;
 			}
 		}
-
-//		if (chapter->reference_count > 0)
-//		{
-//			for (uint32_t reference_index = 0; reference_index < chapter->reference_count; ++reference_index)
-//			{
-//				++ctx.ref_count;
-//				++ctx.chapter_ref_count;
-//
-//				document_reference* reference = &chapter->references[reference_index];
-//				fprintf(f, "\n\t\t<p class=\"footnote\" id=\"ref%d\">\n", ctx.ref_count);
-//				fprintf(f, "\t\t\t[<a href=\"#ref-return%d\">%d</a>] ", ctx.ref_count, ctx.chapter_ref_count);
-//				print_html_text_block(&ctx, reference->text);
-//				fprintf(f, "\n\t\t</p>");
-//			}
-//		}
 	}
 
 	print_str(f, "\n\t\t</office:text>\n\t</office:body>\n</office:document-content>");
