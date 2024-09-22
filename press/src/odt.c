@@ -66,7 +66,7 @@ static void create_odt_styles(void)
 		"\t\t<style:style style:name=\"Blockquote\" style:family=\"paragraph\" style:parent-style-name=\"Paragraph\">\n"
 		"\t\t\t<style:paragraph-properties fo:margin-left=\"1.25cm\" fo:margin-right=\"1.25cm\" fo:margin-top=\"0.5cm\" fo:keep-together=\"always\" fo:keep-with-next=\"always\"/>\n"
 		"\t\t</style:style>\n"
-		"\t\t<style:style style:name=\"Blockquote_Indent\" style:family=\"paragraph\" style:parent-style-name=\"Blockquote\">\n"
+		"\t\t<style:style style:name=\"Blockquote_Indent\" style:display-name=\"Blockquote Indent\" style:family=\"paragraph\" style:parent-style-name=\"Blockquote\">\n"
 		"\t\t\t<style:paragraph-properties fo:margin-top=\"0.0cm\" fo:text-indent=\"0.5cm\"/>\n"
 		"\t\t</style:style>\n"
 		"\t\t<style:style style:name=\"Blockquote_Citation\" style:display-name=\"Blockquote Citation\" style:family=\"paragraph\" style:parent-style-name=\"Blockquote\">\n"
