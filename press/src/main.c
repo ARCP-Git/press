@@ -28,7 +28,7 @@ int main(int argc, const char** argv)
 	bool epub = false;
 	const char* epub_cover = nullptr;
 
-	fputs("ARCP Press Tool v0.9.6\n", stdout);
+	fputs("ARCP Press Tool v0.9.7\n", stdout);
 
 	mem_init();
 	void* frame = mem_push();
