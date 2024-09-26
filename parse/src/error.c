@@ -9,17 +9,14 @@ void install_error_handler(error_callback handler)
 
 void handle_error(const char* format, ...)
 {
-	fputs("Error: ", stderr);
+	print_error("Error: ");
 
 	va_list args;
 	va_start(args, format);
-	vfprintf(stderr, format, args);
+	print_error_vargs(format, args);
 	va_end(args);
-
-	fputc('\n', stderr);
-
-	assert(false);
-	exit(EXIT_FAILURE);
+	
+	exit_failure();
 }
 
 void exit_failure(void)

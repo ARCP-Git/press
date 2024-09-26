@@ -36,7 +36,7 @@ void mem_init(void)
 {
 	mem_begin = mem_current = mem_mapped = VirtualAlloc(nullptr, VMEM_SIZE, MEM_RESERVE, PAGE_READWRITE);
 	if (!mem_current)
-		print_error("Unable to reserve %d MiB virtual memory.", VMEM_SIZE);
+		handle_error("Unable to reserve %d MiB virtual memory.", VMEM_SIZE);
 }
 
 void mem_term(void)
@@ -77,7 +77,7 @@ void* mem_alloc(int64_t size)
 		const int64_t map_size = mem_mapped - current_mapped;
 		current_mapped = VirtualAlloc(current_mapped, map_size, MEM_COMMIT, PAGE_READWRITE);
 		if (!current_mapped)
-			print_error("Out of memory.", VMEM_SIZE);
+			handle_error("Out of memory.", VMEM_SIZE);
 
 		POISON_MEM(current_mapped, map_size);
 	}

@@ -4,7 +4,7 @@ static void print_usage(void)
 {
 	fprintf(stderr,
 		"Usage:\n"
-		"  press <src.txt> [--html|--epub]\n"
+		"  press <src.txt> [--odt|--html|--epub]\n"
 		"\n"
 		"Flags:\n"
 		"  none    validates source file and produces no output\n"
