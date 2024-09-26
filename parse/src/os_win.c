@@ -1,8 +1,15 @@
 #ifdef __SANITIZE_ADDRESS__
 	#include <sanitizer/asan_interface.h>
+	#define POISON_MEM(addr, size) do { __asan_poison_memory_region(addr, size); } while(0)
+	#define UNPOISON_MEM(addr, size) do { __asan_unpoison_memory_region(addr, size); } while(0)
 #else
-	#define ASAN_POISON_MEMORY_REGION(addr, size)
-	#define ASAN_UNPOISON_MEMORY_REGION(addr, size)
+	#if NDEBUG
+		#define POISON_MEM(addr, size) do {} while(0)
+		#define UNPOISON_MEM(addr, size) do {} while(0)
+	#else
+		#define POISON_MEM(addr, size) do { memset(addr, 0xFF, size); } while(0)
+		#define UNPOISON_MEM(addr, size) do {} while(0)
+	#endif
 #endif
 
 #define PAGE_SIZE (INT64_C(4) << 10)
@@ -47,7 +54,7 @@ void mem_pop(void* frame)
 	assert((uint8_t*)frame >= mem_begin);
 	assert((uint8_t*)frame <= mem_current);
 
-	ASAN_POISON_MEMORY_REGION(frame, mem_current - (uint8_t*)frame);
+	POISON_MEM(frame, mem_current - (uint8_t*)frame);
 
 	mem_current = frame;
 }
@@ -72,10 +79,10 @@ void* mem_alloc(int64_t size)
 		if (!current_mapped)
 			print_error("Out of memory.", VMEM_SIZE);
 
-		ASAN_POISON_MEMORY_REGION(current_mapped, map_size);
+		POISON_MEM(current_mapped, map_size);
 	}
 
-	ASAN_UNPOISON_MEMORY_REGION(ptr, size);
+	UNPOISON_MEM(ptr, size);
 
 	mem_current = next;
 
@@ -111,5 +118,7 @@ void delete_dir(const char* dir)
 	mem_pop(frame);
 }
 
+#undef POISON_MEM
+#undef UNPOISON_MEM
 #undef PAGE_SIZE
 #undef VMEM_SIZE
