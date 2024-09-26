@@ -78,21 +78,29 @@ int main(int argc, const char** argv)
 
 		// Allocate file path array
 		filepaths = mem_alloc(sizeof(const char*) * filepath_count);
-		filepath_count = 0;
 
-		// Allocate and fill file paths
-		current = filepath_buffer + dir_len + 1;
-		do
+		if (filepath_count == 1)
 		{
-			const int64_t file_len = strlen(current);
-			char* path = mem_alloc(dir_len + 1 + file_len + 1);
-			memcpy(path, dir, dir_len);
-			path[dir_len] = '\\';
-			memcpy(path + dir_len + 1, current, file_len + 1);
-			current += file_len + 1;
+			filepaths[0] = dir;
+		}
+		else
+		{
+			filepath_count = 0;
 
-			filepaths[filepath_count++] = path;
-		} while(*current != 0);
+			// Allocate and fill file paths
+			current = filepath_buffer + dir_len + 1;
+			do
+			{
+				const int64_t file_len = strlen(current);
+				char* path = mem_alloc(dir_len + 1 + file_len + 1);
+				memcpy(path, dir, dir_len);
+				path[dir_len] = '\\';
+				memcpy(path + dir_len + 1, current, file_len + 1);
+				current += file_len + 1;
+
+				filepaths[filepath_count++] = path;
+			} while(*current != 0);
+		}
 	}
 	else
 	{
