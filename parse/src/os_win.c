@@ -1,3 +1,10 @@
+#ifdef __SANITIZE_ADDRESS__
+	#include <sanitizer/asan_interface.h>
+#else
+	#define ASAN_POISON_MEMORY_REGION(addr, size)
+	#define ASAN_UNPOISON_MEMORY_REGION(addr, size)
+#endif
+
 #define PAGE_SIZE (INT64_C(4) << 10)
 #define VMEM_SIZE (INT64_C(64) << 20)
 static_assert((PAGE_SIZE & (PAGE_SIZE - 1)) == 0); // Ensure power of two
@@ -40,6 +47,8 @@ void mem_pop(void* frame)
 	assert((uint8_t*)frame >= mem_begin);
 	assert((uint8_t*)frame <= mem_current);
 
+	ASAN_POISON_MEMORY_REGION(frame, mem_current - (uint8_t*)frame);
+
 	mem_current = frame;
 }
 
@@ -62,7 +71,11 @@ void* mem_alloc(int64_t size)
 		current_mapped = VirtualAlloc(current_mapped, map_size, MEM_COMMIT, PAGE_READWRITE);
 		if (!current_mapped)
 			print_error("Out of memory.", VMEM_SIZE);
+
+		ASAN_POISON_MEMORY_REGION(current_mapped, map_size);
 	}
+
+	ASAN_UNPOISON_MEMORY_REGION(ptr, size);
 
 	mem_current = next;
 

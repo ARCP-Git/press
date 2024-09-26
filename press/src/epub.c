@@ -187,9 +187,9 @@ static void create_epub_ncx(const document* doc)
 		"	</head>\n"
 	);
 
-	print_str(f, "\t<docTitle>");
+	print_str(f, "\t<docTitle>\n");
 	print_fmt(f, "\t\t<text>%s</text>\n", doc->metadata.title);
-	print_str(f, "\t</docTitle>\t<navMap>\n");
+	print_str(f, "\t</docTitle>\n\t<navMap>\n");
 
 	for (uint32_t i = 0; i < doc->chapter_count; ++i)
 	{

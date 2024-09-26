@@ -4,6 +4,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../src/zip.c"
 #include "../src/odt.c"
@@ -14,6 +15,3 @@
 
 #include <windows.h>
 #include "../src/main.c"
-
-// Uncomment the next line for full unity builds
-//#include "../../parse/lib/unity_parse.c"
