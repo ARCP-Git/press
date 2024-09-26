@@ -152,6 +152,7 @@ static void generate_zip(const char* filepath, const char** input_files, const c
 	ecdr->total_entry_count				= count;
 	ecdr->central_directory_size		= central_directory_size;
 	ecdr->offset						= (uint32_t)((uint8_t*)current_dir - zip_data);
+	ecdr->comment_len					= 0x0000;
 
 	for (uint32_t i = 0; i < count; ++i)
 	{
