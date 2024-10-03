@@ -11,6 +11,9 @@
 {Authors:		Friedrich Engels}
 {Translator:	Edward Aveling}
 
+// Note: this uses a modified letter colon instead of a regular colon to get around path limitations
+{Filename:		Socialism꞉ Utopian and Scientific}
+
 # Introduction
 
 The present little book is, originally, a part of a larger whole. About 1875, Dr. E. Dühring, *privat-docent* at Berlin University, suddenly and rather clamorously announced his conversion to socialism, and presented the German public not only with an elaborate socialist theory, but also with a complete practical plan for the reorganisation of society. As a matter of course, he fell foul of his predecessors; above all, he honoured Marx by pouring out upon him the full vials of his wrath.

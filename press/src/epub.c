@@ -540,7 +540,7 @@ static void generate_epub_zip(const document* doc)
 		}
 	}
 
-	const char* epub_path = generate_path(OUTPUT_DIR "/%s.epub", doc->metadata.title);
+	const char* epub_path = generate_path(OUTPUT_DIR "/%s.epub", doc->metadata.filename);
 	generate_zip(epub_path, inputs, outputs, file_count);
 
 	mem_pop(frame);

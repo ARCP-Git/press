@@ -4,6 +4,7 @@ typedef enum
 	metadata_entry_type_title,
 	metadata_entry_type_author,
 	metadata_entry_type_authors,
+	metadata_entry_type_filename,
 	metadata_entry_type_translator,
 	metadata_entry_type_translators,
 	metadata_entry_type_written,
@@ -16,6 +17,7 @@ static const char* metadata_strings[] = {
 	"Title:",
 	"Author:",
 	"Authors:",
+	"Filename:",
 	"Translator:",
 	"Translators:",
 	"Written:",
@@ -232,6 +234,14 @@ static void parse_metadata_authors(tokenise_context* ctx)
 	ctx->authors = parse_metadata_list(ctx, &ctx->metadata->author_count);
 }
 
+static void parse_metadata_filename(tokenise_context* ctx)
+{
+	if (ctx->metadata->filename)
+		handle_tokenise_error(ctx, "Duplicate \"Filename\" metadata attribute.");
+
+	ctx->metadata->filename = parse_metadata_text(ctx);
+}
+
 static void parse_metadata_translator(tokenise_context* ctx)
 {
 	if (ctx->translators)
@@ -266,6 +276,9 @@ static void parse_metadata(tokenise_context* ctx, metadata_entry_type entry_type
 		break;
 	case metadata_entry_type_authors:
 		parse_metadata_authors(ctx);
+		break;
+	case metadata_entry_type_filename:
+		parse_metadata_filename(ctx);
 		break;
 	case metadata_entry_type_translator:
 		parse_metadata_translator(ctx);

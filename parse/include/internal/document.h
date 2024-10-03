@@ -70,6 +70,7 @@ typedef struct
 	const char*		title;
 	const char**	authors;
 	const char**	translators;
+	const char*		filename;
 	date			written;
 	date			published;
 	uint32_t		author_count;

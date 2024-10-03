@@ -429,7 +429,7 @@ static void generate_odt(const document* doc)
 	static_assert(sizeof(outputs) == sizeof(inputs));
 	const uint32_t output_count = sizeof(outputs) / sizeof(const char*);
 
-	const char* odt_path = generate_path(OUTPUT_DIR "/%s.odt", doc->metadata.title);
+	const char* odt_path = generate_path(OUTPUT_DIR "/%s.odt", doc->metadata.filename);
 	generate_zip(odt_path, inputs, outputs, output_count);
 
 	delete_dir(OUTPUT_DIR "\\odt");

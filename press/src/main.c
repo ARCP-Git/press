@@ -170,6 +170,11 @@ int main(int argc, const char** argv)
 		if (!doc.metadata.title)
 			doc.metadata.title = copy_filename(filepaths[i]);
 
+		if (!doc.metadata.filename)
+			doc.metadata.filename = doc.metadata.title;
+
+		validate_filename(doc.metadata.filename);
+
 		// Default to article to allow small documents without any metadata
 		if (doc.metadata.type == document_type_none)
 			doc.metadata.type = document_type_article;

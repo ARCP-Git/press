@@ -9,7 +9,7 @@ file open_file(const char* path, file_mode mode)
 	file f;
 	f.f = fopen(path, mode_string);
 	if (!f.f)
-		handle_error("Unable to open file \"%s\": %s.\n", path, strerror(errno));
+		handle_error("Unable to open file \"%s\": %s.", path, strerror(errno));
 
 	return f;
 }
@@ -86,4 +86,26 @@ const char* generate_path(const char* format, ...)
 	va_end(args);
 
 	return path;
+}
+
+void validate_filename(const char* path)
+{
+	const char* current = path;
+
+	while (*current)
+	{
+		switch (*current++)
+		{
+		case '*':
+		case ':':
+		case '?':
+		case '"':
+		case '<':
+		case '>':
+		case '|':
+		case '/':
+		case '\\':
+			handle_error("Invalid filename \"%s\".\nCharacters \"*:?\"<>|/\\\" are not permitted.\nUse filename attribute to specify a valid filename, e.g., \"{Filename: Book Title}\".", path);
+		}
+	}
 }
