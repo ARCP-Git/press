@@ -26,30 +26,33 @@ static void print_html_text_block(html_context* ctx, const char* text)
 			const document_chapter* chapter = &ctx->doc->chapters[ctx->chapter_index];
 			const document_note* note = &chapter->notes[chapter_note_count];
 
-			print_fmt(ctx->f, "<sup><a id=\"note-return%d\" href=\"#note%d\" title=\"", note_count, note_count);
-
-			int begin_count = 0;
-			for (uint32_t element_index = 0; element_index < note->element_count; ++element_index)
-			{
-				document_element* element = &note->elements[element_index];
-
-				if (element->type == document_element_type_text_block)
-				{
-					print_simple_text(ctx->f, element->text);
-				}
-				else if (element->type == document_element_type_paragraph_begin)
-				{
-					++begin_count;
-					if (begin_count > 1)
-						print_str(ctx->f, "\n\n");
-				}
-			}
+//			print_fmt(ctx->f, "<sup><a id=\"note-return%d\" href=\"#note%d\" title=\"", note_count, note_count);
+//
+//			int begin_count = 0;
+//			for (uint32_t element_index = 0; element_index < note->element_count; ++element_index)
+//			{
+//				document_element* element = &note->elements[element_index];
+//
+//				if (element->type == document_element_type_text_block)
+//				{
+//					print_simple_text(ctx->f, element->text);
+//				}
+//				else if (element->type == document_element_type_paragraph_begin)
+//				{
+//					++begin_count;
+//					if (begin_count > 1)
+//						print_str(ctx->f, "\n\n");
+//				}
+//			}
 
 			print_fmt(ctx->f, "\">[%d]</a></sup>", chapter_note_count + 1);
 		}
 		else
 		{
-			print_char_token(ctx->f, *text);
+			if (*text == '&')
+				print_str(ctx->f, "&amp;");
+			else
+				print_char_token(ctx->f, *text);
 		}
 
 		++text;
