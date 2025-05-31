@@ -9,6 +9,8 @@ typedef enum
 	line_token_type_heading_1,
 	line_token_type_heading_2,
 	line_token_type_heading_3,
+	line_token_type_heading_4,
+	line_token_type_heading_5,
 	line_token_type_preformatted,
 	line_token_type_right_aligned,
 	line_token_type_block_newline,

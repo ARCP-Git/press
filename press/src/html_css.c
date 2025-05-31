@@ -60,7 +60,7 @@ static void output_css(html_context* ctx)
 		"}\n\n"
 
 		// Avoid new lines after a heading when printing
-		"h1, h2, h3 {\n"
+		"h1, h2, h3, h4, h5 {\n"
 		"	page-break-after: avoid;\n"
 		"}\n\n"
 
@@ -118,7 +118,9 @@ static void output_css(html_context* ctx)
 		// Paragraphs after headings are not indented
 		"h1 + p,\n"
 		"h2 + p,\n"
-		"h3 + p {\n"
+		"h3 + p,\n"
+		"h4 + p,\n"
+		"h5 + p {\n"
 		"	text-indent: 0;\n"
 		"}\n\n"
 

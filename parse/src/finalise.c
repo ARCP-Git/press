@@ -101,6 +101,20 @@ static line_token* finalise_heading_3(finalise_context* ctx, line_token* token)
 	return finalise_get_next_token(ctx);
 }
 
+static line_token* finalise_heading_4(finalise_context* ctx, line_token* token)
+{
+	finalise_add_element(ctx, document_element_type_heading_4, token->text);
+
+	return finalise_get_next_token(ctx);
+}
+
+static line_token* finalise_heading_5(finalise_context* ctx, line_token* token)
+{
+	finalise_add_element(ctx, document_element_type_heading_5, token->text);
+
+	return finalise_get_next_token(ctx);
+}
+
 static line_token* finalise_note(finalise_context* ctx, line_token* token)
 {
 	assert(ctx->current_note < ctx->note_count);
@@ -331,6 +345,12 @@ static void finalise(line_tokens* tokens, const doc_mem_req* mem_req, document* 
 			break;
 		case line_token_type_heading_3:
 			token = finalise_heading_3(&ctx, token);
+			break;
+		case line_token_type_heading_4:
+			token = finalise_heading_4(&ctx, token);
+			break;
+		case line_token_type_heading_5:
+			token = finalise_heading_5(&ctx, token);
 			break;
 		case line_token_type_preformatted:
 			//token = finalise_preformatted(&ctx, token);

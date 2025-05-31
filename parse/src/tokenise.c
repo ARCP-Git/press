@@ -604,8 +604,8 @@ static char tokenise_heading(tokenise_context* ctx, char c)
 
 	if (depth == 0)
 		ctx->note_count = 0;
-	else if (depth > 2)
-		handle_tokenise_error(ctx, "Exceeded maximum heading depth of 3.");
+	else if (depth > 5)
+		handle_tokenise_error(ctx, "Exceeded maximum heading depth of 5.");
 
 	if (c != ' ')
 		handle_tokenise_error(ctx, "Heading tags '#' must be followed by a space.");

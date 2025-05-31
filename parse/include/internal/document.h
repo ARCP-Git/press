@@ -31,6 +31,8 @@ typedef enum
 	document_element_type_heading_1,
 	document_element_type_heading_2,
 	document_element_type_heading_3,
+	document_element_type_heading_4,
+	document_element_type_heading_5,
 	document_element_type_list_item,
 	document_element_type_text_block,
 	document_element_type_line_break,

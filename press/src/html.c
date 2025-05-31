@@ -26,26 +26,29 @@ static void print_html_text_block(html_context* ctx, const char* text)
 			const document_chapter* chapter = &ctx->doc->chapters[ctx->chapter_index];
 			const document_note* note = &chapter->notes[chapter_note_count];
 
-//			print_fmt(ctx->f, "<sup><a id=\"note-return%d\" href=\"#note%d\" title=\"", note_count, note_count);
-//
-//			int begin_count = 0;
-//			for (uint32_t element_index = 0; element_index < note->element_count; ++element_index)
-//			{
-//				document_element* element = &note->elements[element_index];
-//
-//				if (element->type == document_element_type_text_block)
-//				{
-//					print_simple_text(ctx->f, element->text);
-//				}
-//				else if (element->type == document_element_type_paragraph_begin)
-//				{
-//					++begin_count;
-//					if (begin_count > 1)
-//						print_str(ctx->f, "\n\n");
-//				}
-//			}
+			// TODO: Fix title tag generation
+			//print_fmt(ctx->f, "<sup><a id=\"note-return%d\" href=\"#note%d\" title=\"", note_count, note_count);
+			print_fmt(ctx->f, "<sup><a id=\"note-return%d\" href=\"#note%d\"", note_count, note_count);
 
-			print_fmt(ctx->f, "\">[%d]</a></sup>", chapter_note_count + 1);
+		//	int begin_count = 0;
+		//	for (uint32_t element_index = 0; element_index < note->element_count; ++element_index)
+		//	{
+		//		document_element* element = &note->elements[element_index];
+
+		//		if (element->type == document_element_type_text_block)
+		//		{
+		//			print_simple_text(ctx->f, element->text);
+		//		}
+		//		else if (element->type == document_element_type_paragraph_begin)
+		//		{
+		//			++begin_count;
+		//			if (begin_count > 1)
+		//				print_str(ctx->f, "\n\n");
+		//		}
+		//	}
+
+			//print_fmt(ctx->f, "\">[%d]</a></sup>", chapter_note_count + 1);
+			print_fmt(ctx->f, ">[%d]</a></sup>", chapter_note_count + 1);
 		}
 		else
 		{
@@ -245,6 +248,18 @@ static void generate_html(const document* doc)
 				print_str(f, "<h3>");
 				print_html_text_block(&ctx, element->text);
 				print_str(f, "</h3>");
+				break;
+			case document_element_type_heading_4:
+				print_tabs(f, depth);
+				print_str(f, "<h4>");
+				print_html_text_block(&ctx, element->text);
+				print_str(f, "</h4>");
+				break;
+			case document_element_type_heading_5:
+				print_tabs(f, depth);
+				print_str(f, "<h5>");
+				print_html_text_block(&ctx, element->text);
+				print_str(f, "</h5>");
 				break;
 			case document_element_type_text_block:
 				print_html_text_block(&ctx, element->text);

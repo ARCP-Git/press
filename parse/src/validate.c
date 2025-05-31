@@ -70,7 +70,7 @@ static line_token* validate_heading(validate_context* ctx, line_token* token)
 {
 	const int level = token->type - line_token_type_heading_1;
 	assert(level >= 0);
-	assert(level < 3);
+	assert(level <= 5);
 
 	++ctx->element_count;
 
@@ -316,6 +316,8 @@ static void validate(line_tokens* tokens, doc_mem_req* out_mem_req)
 		case line_token_type_heading_1:
 		case line_token_type_heading_2:
 		case line_token_type_heading_3:
+		case line_token_type_heading_4:
+		case line_token_type_heading_5:
 			token = validate_heading(&ctx, token);
 			break;
 		case line_token_type_note:

@@ -68,7 +68,9 @@ static void create_epub_css(void)
 		// Paragraphs after headings are not indented
 		"h1 + p,\n"
 		"h2 + p,\n"
-		"h3 + p {\n"
+		"h3 + p,\n"
+		"h4 + p,\n"
+		"h5 + p {\n"
 		"	text-indent: 0;\n"
 		"}\n\n"
 		// Blockquote indentation
@@ -371,6 +373,18 @@ static void create_epub_chapter(const document* doc, uint32_t index)
 			print_str(f, "<h3>");
 			print_html_text_block(&ctx, element->text);
 			print_str(f, "</h3>");
+			break;
+		case document_element_type_heading_4:
+			print_tabs(f, depth);
+			print_str(f, "<h4>");
+			print_html_text_block(&ctx, element->text);
+			print_str(f, "</h4>");
+			break;
+		case document_element_type_heading_5:
+			print_tabs(f, depth);
+			print_str(f, "<h5>");
+			print_html_text_block(&ctx, element->text);
+			print_str(f, "</h5>");
 			break;
 		case document_element_type_text_block:
 			print_tabs(f, depth + 1);
