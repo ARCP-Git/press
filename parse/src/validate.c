@@ -108,6 +108,8 @@ static line_token* validate_note(validate_context* ctx, line_token* token)
 			break;
 		case line_token_type_heading_2:
 		case line_token_type_heading_3:
+		case line_token_type_heading_4:
+		case line_token_type_heading_5:
 			handle_validate_error(ctx, "Notes may not contain headings.");
 			break;
 		case line_token_type_block_newline:
@@ -206,6 +208,7 @@ static line_token* validate_block_citation(validate_context* ctx, line_token* to
 		NOTE: No need to increase element count as we will be appropriating the one added by the
 		previous new line.
 	*/
+	//++ctx->element_count;
 
 	token = validate_get_next_token(ctx);
 	if (token->type != line_token_type_newline)
