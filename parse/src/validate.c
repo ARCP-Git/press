@@ -197,7 +197,7 @@ static line_token* validate_block_paragraph(validate_context* ctx, line_token* t
 
 	token = validate_get_next_token(ctx);
 	if (token->type != line_token_type_block_paragraph && token->type != line_token_type_block_newline && token->type != line_token_type_newline)
-		handle_validate_error(ctx, "Block quotes must be followed by a blank indented line.");
+		handle_validate_error(ctx, "Block quotes must be followed by a blank indented or unindented line.");
 
 	return token;
 }
@@ -208,7 +208,6 @@ static line_token* validate_block_citation(validate_context* ctx, line_token* to
 		NOTE: No need to increase element count as we will be appropriating the one added by the
 		previous new line.
 	*/
-	//++ctx->element_count;
 
 	token = validate_get_next_token(ctx);
 	if (token->type != line_token_type_newline)
@@ -219,9 +218,9 @@ static line_token* validate_block_citation(validate_context* ctx, line_token* to
 
 static line_token* validate_blockquote(validate_context* ctx, line_token* token)
 {
-	ctx->element_count += 5;
+	ctx->element_count += 3;
 
-	token = validate_get_next_token(ctx);
+	token = validate_block_paragraph(ctx, token);
 	for (;;)
 	{
 		if (token->type == line_token_type_block_newline)

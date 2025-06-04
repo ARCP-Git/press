@@ -744,6 +744,9 @@ static char tokenise_blockquote_citation(tokenise_context* ctx, char c)
 		add_line_token(ctx, line_token_type_block_citation);
 		peek_apply(ctx, &peek);
 
+		if (peek_char(ctx, &peek) == '-')
+			handle_peek_error(&peek, "Too many hyphens.");
+
 		return tokenise_text(ctx, get_char(ctx));
 	}
 
