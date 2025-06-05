@@ -472,14 +472,26 @@ static char tokenise_text(tokenise_context* ctx, char c)
 		if (c == '\\')
 		{
 			c = get_char(ctx);
-
-			// TODO: Why not just put '[' and ']' text directly? They aren't special chars.
-			if (c == '[')
-				put_text_token(ctx, text_token_type_left_square_bracket);
-			else if (c == ']')
-				put_text_token(ctx, text_token_type_right_square_bracket);
+			if (
+				c == '{' ||
+				c == '[' ||
+				c == '>' ||
+				c == '#' ||
+				c == '*' ||
+				c == 'I' ||
+				c == 'V' ||
+				c == 'X' ||
+				(c >= '1' && c <= '9') ||
+				(c >= 'a' && c <= 'z')
+			)
+			{
+				++char_count;
+				put_char(ctx, c);
+			}
 			else
+			{
 				handle_tokenise_error(ctx, "Invalid character escape sequence.");
+			}
 		}
 		else if (c == '"')
 		{
