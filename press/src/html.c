@@ -297,6 +297,10 @@ static void generate_html(const document* doc)
 				print_tabs(f, depth);
 				print_str(f, "<p class=\"right-aligned\">");
 				break;
+			case document_element_type_centre_aligned_begin:
+				print_tabs(f, depth);
+				print_str(f, "<p class=\"centre-aligned\">");
+				break;
 			case document_element_type_ordered_list_begin_roman:
 				print_tabs(f, depth++);
 				print_str(f, "<ol type=\"I\">");

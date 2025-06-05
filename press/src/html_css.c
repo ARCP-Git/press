@@ -77,6 +77,21 @@ static void output_css(html_context* ctx)
 		"p.right-aligned {\n"
 		"	margin-top: 1em;\n"
 		"	text-align: right;\n"
+		"	text-indent: 0;\n"
+		"}\n\n"
+
+		// Centre-aligned paragraphs
+		"p.centre-aligned {\n"
+		"	margin-top: 1em;\n"
+		"	text-align: center;\n"
+		"	text-indent: 0;\n"
+		"	margin-bottom: 1em;\n"
+		"}\n\n"
+
+		// Paragraphs following aligned are not indented
+		"p.right-aligned + p,\n"
+		"p.centre-aligned + p {\n"
+		"	text-indent: 0;\n"
 		"}\n\n"
 
 		// Paragraph with previous gap

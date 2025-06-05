@@ -783,16 +783,43 @@ static char tokenise_blockquote(tokenise_context* ctx, char c)
 	return c;
 }
 
-static char tokenise_right_aligned(tokenise_context* ctx, char c)
+static char tokenise_aligned(tokenise_context* ctx, char c)
 {
-	c = get_char(ctx);
-	if (c != ' ')
-		handle_tokenise_error(ctx, "Right-aligned text \">\" must be followed by a space.");
+	peek_state peek;
+	peek_init(ctx, &peek);
 
-	// Consime space
+	c = peek_char(ctx, &peek);
+
+	line_token_type type;
+	if (c == '>')
+	{
+		peek_apply(ctx, &peek);
+		c = get_char(ctx);
+
+		if (c != ' ')
+			handle_tokenise_error(ctx, "Right-aligned text \">\" must be followed by a space.");
+
+		type = line_token_type_right_aligned;
+	}
+	else if (c == '<')
+	{
+		peek_apply(ctx, &peek);
+		c = get_char(ctx);
+
+		if (c != ' ')
+			handle_tokenise_error(ctx, "Centre-aligned text \"><\" must be followed by a space.");
+
+		type = line_token_type_centre_aligned;
+	}
+	else
+	{
+		return tokenise_paragraph(ctx, '>', false);
+	}
+
+	// Consume space
 	c = get_char(ctx);
 
-	add_line_token(ctx, line_token_type_right_aligned);
+	add_line_token(ctx, type);
 
 	return tokenise_text(ctx, c);
 }
@@ -896,7 +923,7 @@ static void tokenise(char* data, line_tokens* out_tokens, document_metadata* met
 		else if (c == '\t')
 			c = tokenise_blockquote(&ctx, c);
 		else if (c == '>')
-			c = tokenise_right_aligned(&ctx, c);
+			c = tokenise_aligned(&ctx, c);
 		else if (c == '\n')
 			c = tokenise_newline(&ctx, c, false);
 		else if (c == '#')

@@ -56,8 +56,8 @@ Our translation comprises the first book of the work only. But this first book i
 
 Free trade has exhausted its resources; even Manchester doubts this its quondam economic gospel.[2] Foreign industry, rapidly developing, stares English production in the face everywhere, not only in protected, but also in neutral markets, and even on this side of the Channel. While the productive power increases in a geometric, the extension of markets proceeds at best in an arithmetic ratio. The decennial cycle of stagnation, prosperity, overproduction and crisis, ever recurrent from 1825 to 1867, seems indeed to have run its course; but only to land us in the slough of despond of a permanent and chronic depression. The sighed-for period of prosperity will not come; as often as we seem to perceive its heralding symptoms, so often do they again vanish into air. Meanwhile, each succeeding winter brings up afresh the great question, "what to do with the unemployed"; but while the number of the unemployed keeps swelling from year to year, there is nobody to answer that question; and we can almost calculate the moment when the unemployed losing patience will take their own fate into their own hands. Surely, at such a moment, the voice ought to be heard of a man whose whole theory is the result of a lifelong study of the economic history and condition of England, and whom that study led to the conclusion that, at least in Europe, England is the only country where the inevitable social revolution might be effected entirely by peaceful and legal means. He certainly never forgot to add that he hardly expected the English ruling classes to submit, without a "proslavery rebellion", to this peaceful and legal revolution.
 
-> Frederick Engels
-> November 5, 1886
+>> Frederick Engels
+>> November 5, 1886
 
 [1] *Le Capital*, par Karl Marx. Traduction de M.J. Roy, entièrement revisée par l'auteur. Paris. Lachâtre. This translation, especially in the latter part of the book, contains considerable alterations in and additions to the text of the second German edition.
 
@@ -95,8 +95,8 @@ Every opinion based on scientific criticism I welcome. As to prejudices of so-ca
 "Segui il tuo corso, e lascia dir le genti."/*
 [Follow your own course, and let people talk---paraphrased from Dante]*/
 
-> Karl Marx
-> London, July 25, 1867
+>> Karl Marx
+>> London, July 25, 1867
 
 [1] This is the more necessary, as even the section of Ferdinand Lassalle's work against Schulze-Delitzsch, in which he professes to give "the intellectual quintessence" of my explanations on these subjects, contains important mistakes. If Ferdinand Lassalle has borrowed almost literally from my writings, and without any acknowledgement, all the general theoretical propositions in his economic works, e.g., those on the historical character of capital, on the connection between the conditions of production and the mode of production, etc., etc., even to the terminology created by me, this may perhaps be due to purposes of propaganda. I am here, of course, not speaking of his detailed working out and application of these propositions, with which I have nothing to do.
 
@@ -163,12 +163,11 @@ In its mystified form, dialectic became the fashion in Germany, because it seeme
 
 The contradictions inherent in the movement of capitalist society impress themselves upon the practical bourgeois most strikingly in the changes of the periodic cycle, through which modern industry runs, and whose crowning point is the universal crisis. That crisis is once again approaching, although as yet but in its preliminary stage; and by the universality of its theatre and the intensity of its action it will drum dialectics even into the heads of the mushroom-upstarts of the new, holy Prusso-German empire.
 
-> Karl Marx
-> London, January 24, 1873
+>> Karl Marx
+>> London, January 24, 1873
 
 [1] *Geschichtliche Darstellung des Handels, der Gewerbe und des Ackerbaus, etc.*, von Gustav von Gülich. 5 vols., Jena. 1830--45.
 
-// Originally used quotes
 [2] See my work *Zur Kritik, etc.*, p. 39.
 
 [3] The mealy-mouthed babblers of German vulgar economy fell foul of the style of my book. No one can feel the literary shortcomings in *Das Kapital* more strongly than I myself. Yet I will for the benefit and the enjoyment of these gentlemen and their public quote in this connection one English and one Russian notice. The *Saturday Review*, always hostile to my views, said in its notice of the first edition: "The presentation of the subject invests the driest economic questions with a certain peculiar charm." The *St Petersburg Journal (Sankt-Peterburgskie Viedomosti)*, in its issue of April 8 (20), 1872, says: "The presentation of the subject, with the exception of one or two exceptionally special parts, is distinguished by its comprehensibility by the general reader, its clearness, and, in spite of the scientific intricacy of the subject, by an unusual liveliness. In this respect the author in no way resembles...the majority of German scholars who...write their books in a language so dry and obscure that the heads of ordinary mortals are cracked by it."
@@ -189,9 +188,9 @@ That is a disadvantage I am powerless to overcome, unless it be by forewarning a
 // TODO: Check this formatting
 Believe me, dear citizen,
 
-> Your devoted,
-> Karl Marx
-> London, March 18, 1872
+>> Your devoted,
+>> Karl Marx
+>> London, March 18, 1872
 
 # Afterword to the French Edition
 
@@ -201,8 +200,8 @@ Having once undertaken this work of revision, I was led to apply it also to the 
 
 Below I give the passages in the Afterword to the second German edition which treat of the development of political economy in Germany and the method employed in the present work.
 
-> Karl Marx
-> London, April 28, 1875
+>> Karl Marx
+>> London, April 28, 1875
 
 # Preface to the Third German Edition
 
@@ -224,8 +223,8 @@ In conclusion a few words on Marx's art of quotation, which is so little underst
 
 There is hope that the second volume will appear in the course of 1884.
 
-> Frederick Engels
-> London, November 7, 1883
+>> Frederick Engels
+>> London, November 7, 1883
 
 # Preface to the Fourth German Edition
 
@@ -271,8 +270,8 @@ Eleanor Marx had no difficulty (in the same issue of *To-day*) in dissolving all
 
 With that Mr Sedley Taylor too had had enough, and the result of this whole professorial cobweb, spun out over two decades and two great countries, is that nobody has since dared to cast any other aspersion upon Marx's literary honesty; whilst Mr Sedley Taylor, no doubt, will hereafter put as little confidence in the literary war bulletins of Herr Brentano as Herr Brentano will in the papal infallibility of *Hansard*.
 
-> Frederick Engels
-> London, June 25, 1890
+>> Frederick Engels
+>> London, June 25, 1890
 
 [1] In the English edition of 1887 this addition was made by Engels himself.---Ed.
 
@@ -293,8 +292,8 @@ Have just finished correcting the *last sheet* (49th) of the book. The appendix-
 
 The £15 received with best thanks.
 
-> Greetings, my dear, beloved friend!
-> Your K. Marx
+>> Greetings, my dear, beloved friend!
+>> Your K. Marx
 
 // Book I Capitalist Production
 // Part 1 Commodities and Money
@@ -390,10 +389,10 @@ The simplest value-relation is evidently that of one commodity to some one other
 ### (a) Elementary or Accidental Form of Value
 
 // TODO: Add support for figures
-*x* commodity A = *y* commodity B, or
-*x* commodity A is worth *y* commodity B.
-20 yards of linen = 1 coat, or
-20 Yards of linen are worth 1 coat.
+>< *x* commodity A = *y* commodity B, or
+>< *x* commodity A is worth *y* commodity B.
+>< 20 yards of linen = 1 coat, or
+>< 20 Yards of linen are worth 1 coat.
 
 #### (1) The Two Poles of the Expression of Value: Relative Form and Equivalent Form
 
@@ -482,10 +481,10 @@ The two latter peculiarities of the equivalent form will become more intelligibl
 
 In the first place, he clearly enunciates that the money-form of commodities is only the further development of the simple form of value---i.e., of the expression of the value of one commodity in some other commodity taken at random; for he says:
 
-// TODO: Check the Greek
-5 beds = 1 house (κλῖναι πέντε ἀντὶ οἰκίας)
-is not to be distinguished from
-5 beds = so much money. (κλῖναι πέντε ἀντὶ... ὅσου αἱ πέντε κλῖναι)
+// TODO: I'm not sure the Greek is necessary
+>< 5 beds = 1 house/* (κλῖναι πέντε ἀντὶ οἰκίας)*/
+>< is not to be distinguished from
+>< 5 beds = so much money/*. (κλῖναι πέντε ἀντὶ... ὅσου αἱ πέντε κλῖναι)*/
 
 He further sees that the value-relation which gives rise to this expression makes it necessary that the house should qualitatively be made the equal of the bed, and that, without such an equalisation, these two clearly different things could not be compared with each other as commensurable quantities. "Exchange," he says, "cannot take place without equality, and equality not without commensurability" ("οὔτ᾿ ἰσότης μὴ οὔσης συμμετρίας"). Here, however, he comes to a stop, and gives up the further analysis of the form of value. "It is, however, in reality, impossible (`τῇ μὲν οὖν ἀληθείᾳ ἀδύνατον`), that such unlike things can be commensurable"---i.e., qualitatively equal. Such an equalisation can only be something foreign to their real nature, consequently only "a makeshift for practical purposes".
 
@@ -511,9 +510,14 @@ Nevertheless, the elementary form of value passes by an easy transition into a m
 
 ### (b) Total or Expanded Form of Value
 
-*z* commodity A = *u* commodity B or = *v* commodity C or = *w* commodity D or = *x* commodity E or = etc.
-(20 yards of linen = 1 coat or = 10 lb tea or = 40 lb coffee or
-= 1 quarter corn or = 2 ounces gold or = ½ ton iron or = etc.)
+>< *z* commodity A = *u* commodity B
+>< or = *v* commodity C or = *w* commodity D
+>< or = *x* commodity E or = etc.
+
+>< (20 yards of linen = 1 coat
+>< or = 10 lb tea or = 40 lb coffee
+>< or = 1 quarter corn or = 2 ounces gold
+>< or = ½ ton iron or = etc.)
 
 #### (1) The Expanded Relative Form of Value
 
@@ -531,31 +535,27 @@ In the first place, the relative expression of value is incomplete because the s
 
 The expanded relative value-form is, however, nothing but the sum of the elementary relative expressions or equations of the first kind, such as:
 
-
-20 yards of linen = 1 coat
-20 yards of linen = 10 lb of tea, etc.
-
+>< 20 yards of linen = 1 coat
+>< 20 yards of linen = 10 lb of tea, etc.
 
 Each of these implies the corresponding inverted equation:
 
-
-1 coat = 20 yards of linen
-10 lb of tea = 20 yards of linen, etc.
-
+>< 1 coat = 20 yards of linen
+>< 10 lb of tea = 20 yards of linen, etc.
 
 In fact, when a person exchanges his linen for many other commodities, and thus expresses its value in a series of other commodities, it necessarily follows, that the various owners of the latter exchange them for the linen, and consequently express the value of their various commodities in one and the same third commodity, the linen. If then, we reverse the series, 20 yards of linen = 1 coat or = 10 lb of tea, etc., that is to say, if we give expression to the converse relation already implied in the series, we get,
 
 ### (c) The General Form of Value
 
 // TODO: How to format this equation?
-1 coat =
-10 lb of tea =
-40 lb of coffee =
-1 quarter of corn =
-2 ounces of gold =
-½ a ton of iron =
-*x* commodity A, etc. =
-= 20 yards of linen
+>< 1 coat =
+>< 10 lb of tea =
+>< 40 lb of coffee =
+>< 1 quarter of corn =
+>< 2 ounces of gold =
+>< ½ a ton of iron =
+>< *x* commodity A, etc. =
+>< 20 yards of linen
 
 #### (1) The Altered Character of the Form of Value
 
@@ -601,14 +601,14 @@ The particular commodity, with whose bodily form the equivalent form is thus soc
 
 ### (d) The Money-Form
 
-20 yards of linen =
-1 coat =
-10 lb of tea =
-40 lb of coffee =
-1 quarter of corn =
-½ a ton of iron =
-*x* commodity A =
-2 ounces of gold
+>< 20 yards of linen =
+>< 1 coat =
+>< 10 lb of tea =
+>< 40 lb of coffee =
+>< 1 quarter of corn =
+>< ½ a ton of iron =
+>< *x* commodity A =
+>< 2 ounces of gold
 
 
 In passing from form A to form B, and from the latter to form C, the changes are fundamental. On the other hand, there is no difference between forms C and D, except that, in the latter, gold has assumed the equivalent form in the place of linen. Gold is in form D, what linen was in form C---the universal equivalent. The progress consists in this alone, that the character of direct and universal exchangeability---in other words, that the universal equivalent form---has now, by social custom, become finally identified with the substance, gold.
@@ -771,7 +771,9 @@ Every owner of a commodity wishes to part with it in exchange only for those com
 
 Let us look at the matter a little closer. To the owner of a commodity, every other commodity is, in regard to his own, a particular equivalent, and consequently his own commodity is the universal equivalent for all the others. But since this applies to every owner, there is, in fact, no commodity acting as universal equivalent, and the relative value of commodities possesses no general form under which they can be equated as values and have the magnitude of their values compared. So far, therefore, they do not confront each other as commodities, but only as products or use-values. In their difficulties our commodity owners think like Faust: "Im Anfang war die Tat."/* ["In the beginning was the deed." - Goethe, Faust.]*/ They therefore acted and transacted before they thought. Instinctively they conform to the laws imposed by the nature of commodities. They cannot bring their commodities into relation as values, and therefore as commodities, except by comparing them with some one other commodity as the universal equivalent. That we saw from the analysis of a commodity. But a particular commodity cannot become the universal equivalent except by a social act. The social action therefore of all other commodities, sets apart the particular commodity in which they all represent their values. Thereby the bodily form of this commodity becomes the form of the socially recognised universal equivalent. To be the universal equivalent, becomes, by this social process, the specific function of the commodity thus excluded by the rest. Thus it becomes---money.
 
-	Illi unum consilium habent et virtutem et potestatem suam bestiæ tradunt... Et ne quis possit emere aut vendere, nisi qui habet characterem aut nomen bestiæ, aut numerum nominis ejus/*["These have one mind, and shall give their power and strength unto the beast." Revelations, 17:13; "And that no man might buy or sell, save he that had the mark, or the name of the beast, or the number of his name." Revelations, 13:17.]*/ (*Apocalypse*).
+	Illi unum consilium habent et virtutem et potestatem suam bestiæ tradunt... Et ne quis possit emere aut vendere, nisi qui habet characterem aut nomen bestiæ, aut numerum nominis ejus./*["These have one mind, and shall give their power and strength unto the beast." Revelations, 17:13; "And that no man might buy or sell, save he that had the mark, or the name of the beast, or the number of his name." Revelations, 13:17.]*/
+	
+	---*Apocalypse*
 
 Money is a crystal formed of necessity in the course of the exchanges, whereby different products of labour are practically equated to one another and thus by practice converted into commodities. The historical progress and extension of exchanges develops the contrast, latent in commodities, between use-value and value. The necessity for giving an external expression to this contrast for the purposes of commercial intercourse, urges on the establishment of an independent form of value, and finds no rest until it is once for all satisfied by the differentiation of commodities into commodities and money. At the same rate, then, as the conversion of products into commodities is being accomplished, so also is the conversion of one special commodity into money.[4]
 
@@ -854,7 +856,7 @@ By degrees there arises a discrepancy between the current money-names of the var
 
 These historical causes convert the separation of the money-name from the weight-name into an established habit with the community. Since the standard of money is on the one hand purely conventional, and must on the other hand find general acceptance, it is in the end regulated by law. A given weight of one of the precious metals, an ounce of gold, for instance, becomes officially divided into aliquot parts, with legally bestowed names, such as pound, dollar, etc. These aliquot parts, which thenceforth serve as units of money, are then subdivided into other aliquot parts with legal names, such as shilling, penny, etc.[10] But, both before and after these divisions are made, a definite weight of metal is the standard of metallic money. The sole alteration consists in the subdivision and denomination.
 
-The prices, or quantities of gold, into which the values of commodities are ideally changed, are therefore now expressed in the names of coins, or in the legally valid names of the subdivisions of the gold standard. Hence, instead of saying: a quarter of wheat is worth an ounce of gold; we say, it is worth £3 17s. 10 1//2d. In this way commodities express by their prices how much they are worth, and money serves as *money of account* whenever it is a question of fixing the value of an article in its money-form.[11]
+The prices, or quantities of gold, into which the values of commodities are ideally changed, are therefore now expressed in the names of coins, or in the legally valid names of the subdivisions of the gold standard. Hence, instead of saying: a quarter of wheat is worth an ounce of gold; we say, it is worth £3 17s. 10_1//2d. In this way commodities express by their prices how much they are worth, and money serves as *money of account* whenever it is a question of fixing the value of an article in its money-form.[11]
 
 The name of a thing is something distinct from the qualities of that thing. I know nothing of a man, by knowing that his name is Jacob. In the same way with regard to money, every trace of a value-relation disappears in the names pound, dollar, franc, ducat, etc. The confusion caused by attributing a hidden meaning to these cabalistic signs is all the greater, because these money-names express both the values of commodities, and, at the same time, aliquot parts of the weight of the metal that is the standard of money.[12] On the other hand, it is absolutely necessary that value, in order that it may be distinguished from the varied bodily forms of commodities, should assume this material and unmeaning, but, at the same time, purely social form.[13]
 
@@ -890,11 +892,8 @@ The result of the whole transaction, as regards the weaver, is this, that instea
 
 The exchange of commodities is therefore accompanied by the following changes in their form:
 
-
-// TODO: Centre
-Commodity---Money---Commodity.
-C---M---C.
-
+>< Commodity---Money---Commodity
+>< C---M---C
 
 The result of the whole process is, so far as concerns the objects themselves, C---C, the exchange of one commodity for another, the circulation of materialised social labour. When this result is attained, the process is at an end.
 
@@ -1140,24 +1139,37 @@ Countries in which the bourgeois form of production is developed to a certain ex
 
 // TODO: Check formatting
 // TODO: Re-add quotes
-[44] TODO:/*Gold, yellow, glittering, precious gold!
-Thus much of this, will make black white; foul, fair;
-Wrong, right; base, noble; old, young; coward, valiant.
-...What this, you gods? Why, this
-Will lug your priests and servants from your sides;
-Pluck stout men's pillows from below their heads;
-This yellow slave
-Will knit and break religions; bless the accurs'd;
-Make the hoar leprosy ador'd; place thieves,
-And give them title, knee and approbation,
-With senators on the bench; this is it,
-That makes the wappen'd widow wed again:
-...Come damned earth,
-Though common whore of mankind.
-(Shakespeare, *Timon of Athens*)
-*/
+[44] Gold, yellow, glittering, precious gold!
 
-[45] TODO:/*οὐδὲν γὰρ ἀνθρώποισιν οἷον ἄργυρος
+Thus much of this, will make black white; foul, fair;
+
+Wrong, right; base, noble; old, young; coward, valiant.
+
+...What this, you gods? Why, this
+
+Will lug your priests and servants from your sides;
+
+Pluck stout men's pillows from below their heads;
+
+This yellow slave
+
+Will knit and break religions; bless the accurs'd;
+
+Make the hoar leprosy ador'd; place thieves,
+
+And give them title, knee and approbation,
+
+With senators on the bench; this is it,
+
+That makes the wappen'd widow wed again:
+
+...Come damned earth,
+
+Though common whore of mankind.
+
+(Shakespeare, *Timon of Athens*)
+
+[45] /*TODO:/*οὐδὲν γὰρ ἀνθρώποισιν οἷον ἄργυρος
 κακὸν νόμισμ᾽ ἔβλαστε. τοῦτο καὶ πόλεις
 πορθεῖ, τόδ᾽ ἄνδρας ἐξανίστησιν δόμων:
 τόδ᾽ ἐκδιδάσκει καὶ παραλλάσσει φρένας
@@ -1165,15 +1177,21 @@ Though common whore of mankind.
 πανουργίας δ᾽ ἔδειξεν ἀνθρώποις ἔχειν
 καὶ παντὸς ἔργου δυσσέβειαν εἰδέναι.
 (Sophocles, *Antigone*) [Editor's note: English translation:
-Money! Nothing worse
+*/Money! Nothing worse
+
 in our lives, so current, rampant, so corrupting.
+
 Money---you demolish cities, root men from their homes,
+
 you train and twist good minds and set them on
+
 to the most atrocious schemes. No limit,
+
 you make them adept at every kind of outrage,
+
 every godless crime---money!
-(Sophocles, *The Three Theban Plays: Antigone, Oedipus The King, Oedipus at Colonus*, translated by Robert Fagles, New York, 1984, p. 73).]
-*/
+
+(Sophocles, *The Three Theban Plays: Antigone, Oedipus The King, Oedipus at Colonus*, translated by Robert Fagles, New York, 1984, p. 73)/*.]*/
 
 [46] "Ἐλπιζούσης τῆς πλεονεξίας ἀνάξειν εκ τῶν μυχῶν τῆς γῆς αυτὸν τὸν Πλούτωνα" (Athenaeus, *Deipnosophistae*). [Editor's note: English translation: "The desire of avarice to draw Pluto himself out of the recesses of the earth" (Athenaeus, *The Deipnosophists or Banquet of the Learned of Athenaeus*, translated by C. D. Yonge, London, 1854, p. 368).]
 
@@ -1189,7 +1207,7 @@ every godless crime---money!
 
 [52] "The sudden reversion from a system of credit to a system of hard cash heaps theoretical fright on top of the practical panic; and the dealers by whose agency circulation is affected, shudder before the impenetrable mystery in which their own economic relations are involved" (Karl Marx, l.c., p. 126). "The poor stand still, because the rich have no money to employ them, though they have the same land and hands to provide victuals and clothes, as ever they had;...which is the true Riches of a Nation, and not the money" (John Bellers, *Proposals for Raising a College of Industry*, London, 1696, p 3).
 
-[53] The following shows how such times are exploited by the "*amis du commerce*"/*["friends of commerce"]*/. "On one occasion /*TODO: Add escape sequence: [1839]*/(1839) an old grasping banker [in the city] in his private room raised the lid of the desk he sat over, and displayed to a friend rolls of bank-notes, saying with intense glee there were £600,000 of them, they were held to make money tight, and would all be let out after three o'clock on the same day" (*The Theory of the Exchanges. The Bank Charter Act of 1844*, London, 1864, p. 81). The *Observer*, a semi-official government organ, contained the following paragraph on 24th April, 1864: "Some very curious rumours are current of the means which have been resorted to in order to create a scarcity of bank-notes... Questionable as it would seem, to suppose that any trick of the kind would be adopted, the report has been so universal that it really deserves mention."
+[53] The following shows how such times are exploited by the "*amis du commerce*"/*["friends of commerce"]*/. "On one occasion \[1839] an old grasping banker [in the city] in his private room raised the lid of the desk he sat over, and displayed to a friend rolls of bank-notes, saying with intense glee there were £600,000 of them, they were held to make money tight, and would all be let out after three o'clock on the same day" (*The Theory of the Exchanges. The Bank Charter Act of 1844*, London, 1864, p. 81). The *Observer*, a semi-official government organ, contained the following paragraph on 24th April, 1864: "Some very curious rumours are current of the means which have been resorted to in order to create a scarcity of bank-notes... Questionable as it would seem, to suppose that any trick of the kind would be adopted, the report has been so universal that it really deserves mention."
 
 [54] "The amount of purchases or contracts entered upon during the course of any given day, will not affect the quantity of money afloat on that particular day, but, in the vast majority of cases, will resolve themselves into multifarious drafts upon the quantity of money which may be afloat at subsequent dates more or less distant... The bills granted or credits opened, to-day, need have no resemblance whatever, either in quantity, amount, or duration, to those granted or entered upon to-morrow or next day; nay, many of today's bills, and credits, when due, fall in with a mass of liabilities whose origins traverse a range of antecedent dates altogether indefinite, bills at 12, 6, 3 months or 1 often aggregating together to swell the common liabilities of one particular day..." (*The Currency Theory Reviewed; in a Letter to the Scottish People*, By a Banker in England, Edinburgh, 1845, pp. 29, 30 passim).
 
