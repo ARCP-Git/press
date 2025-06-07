@@ -496,7 +496,6 @@ static char tokenise_text(tokenise_context* ctx, char c, bool within_table)
 	if (c == ' ')
 		handle_tokenise_error(ctx, "Leading spaces are not permitted.");
 
-	//int char_count = 0;
 	int quote_level = 0;
 	emphasis_state em_state = emphasis_state_none;
 
@@ -508,6 +507,7 @@ static char tokenise_text(tokenise_context* ctx, char c, bool within_table)
 			if (
 				c == '{' ||
 				c == '[' ||
+				c == '<' ||
 				c == '>' ||
 				c == '#' ||
 				c == '*' ||
@@ -518,9 +518,25 @@ static char tokenise_text(tokenise_context* ctx, char c, bool within_table)
 				(c >= 'a' && c <= 'z')
 			)
 			{
+				peek_state peek;
+				peek_init(ctx, &peek);
+
 				++ctx->current_line->length;
-				//++char_count;
-				put_char(ctx, c);
+
+				if (c == '<' && peek_char(ctx, &peek) == '"')
+				{
+					peek_apply(ctx, &peek);
+					put_char(ctx, text_token_type_quote_level_1_begin);
+				}
+				else if (c == '>' && peek_char(ctx, &peek) == '"')
+				{
+					peek_apply(ctx, &peek);
+					put_char(ctx, text_token_type_quote_level_1_end);
+				}
+				else
+				{
+					put_char(ctx, c);
+				}
 			}
 			else
 			{
@@ -624,7 +640,6 @@ static char tokenise_text(tokenise_context* ctx, char c, bool within_table)
 		}
 		else
 		{
-			//++char_count;
 			++ctx->current_line->length;
 			put_char(ctx, c);
 		}
