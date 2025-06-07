@@ -53,6 +53,7 @@ static line_token* add_line_token(tokenise_context* ctx, line_token_type type)
 	line->type = type;
 	line->line = ctx->peek.line;
 	line->text = ctx->write_ptr;
+	line->length = 0;
 
 #ifndef NDEBUG
 	// Make it easier to read tokens in the watch window
@@ -314,14 +315,47 @@ static uint32_t roman_to_int(tokenise_context* ctx, peek_state* peek, char c, in
 	return 0;
 }
 
-static bool check_space(tokenise_context* ctx, char c)
+static bool check_space(tokenise_context* ctx, char c, bool within_table)
 {
 	if (c == ' ')
 	{
-		if (ctx->peek.pc == ' ')
-			handle_tokenise_error(ctx, "Extraneous space.");
+		peek_state peek;
+		peek_init(ctx, &peek);
 
-		put_char(ctx, c);
+		c = peek_char(ctx, &peek);
+		if (c == ' ')
+		{
+			// Extra spaces are used within table cells to improve preformatted alignmnt
+			if (within_table)
+			{
+				// Consume trailing spaces until cell character is reached
+				do
+				{
+					c = get_char(ctx);
+				} while (c == ' ');
+
+				put_char(ctx, 0);
+
+				if (c != '|')
+				{
+					// Restore state so that error is report on first extraneous space
+					peek_apply(ctx, &peek);
+					handle_tokenise_error(ctx, "Extraneous space.");
+				}
+			}
+			else
+			{
+				handle_tokenise_error(ctx, "Extraneous space.");
+			}
+		}
+		else if (c == '|' && within_table)
+		{
+			put_char(ctx, 0);
+		}
+		else
+		{
+			put_char(ctx, ' ');
+		}
 
 		return true;
 	}
@@ -449,8 +483,7 @@ static bool check_newline(tokenise_context* ctx, char c, int char_count)
 		if (ctx->peek.pc == ' ')
 			handle_loc_error(ctx->peek.prev_line, ctx->peek.prev_column, "Trailing spaces are not permitted.");
 
-		// Null terminate
-		put_char(ctx, 0);
+		put_char(ctx, 0); // Null terminate
 
 		return true;
 	}
@@ -458,12 +491,12 @@ static bool check_newline(tokenise_context* ctx, char c, int char_count)
 	return false;
 }
 
-static char tokenise_text(tokenise_context* ctx, char c)
+static char tokenise_text(tokenise_context* ctx, char c, bool within_table)
 {
 	if (c == ' ')
 		handle_tokenise_error(ctx, "Leading spaces are not permitted.");
 
-	int char_count = 0;
+	//int char_count = 0;
 	int quote_level = 0;
 	emphasis_state em_state = emphasis_state_none;
 
@@ -485,7 +518,8 @@ static char tokenise_text(tokenise_context* ctx, char c)
 				(c >= 'a' && c <= 'z')
 			)
 			{
-				++char_count;
+				++ctx->current_line->length;
+				//++char_count;
 				put_char(ctx, c);
 			}
 			else
@@ -547,8 +581,15 @@ static char tokenise_text(tokenise_context* ctx, char c)
 				continue;
 			}
 		}
-		else if (check_space(ctx, c))
+		else if (check_space(ctx, c, within_table))
 		{
+			if (within_table && ctx->peek.c == '|')
+			{
+				if (ctx->peek.pc != ' ')
+					handle_tokenise_error(ctx, "Interior of table cells must be padded with a space character.");
+
+				break;
+			}
 		}
 		else if (check_emphasis(ctx, c, &em_state))
 		{
@@ -563,13 +604,28 @@ static char tokenise_text(tokenise_context* ctx, char c)
 		{
 			put_text_token(ctx, text_token_type_joiner);
 		}
-		else if (check_newline(ctx, c, char_count))
+		else if (check_newline(ctx, c, ctx->current_line->length))
 		{
-			break;
+			if (within_table)
+				handle_tokenise_error(ctx, "Unexpected newline within table cell.");
+			else
+				break;
+		}
+		else if (c == '|')
+		{
+			if (within_table)
+			{
+				if (ctx->peek.pc != ' ')
+					handle_tokenise_error(ctx, "Interior of table cells must be padded with a space character.");
+
+				put_char(ctx, 0); // Null terminate
+				break;
+			}
 		}
 		else
 		{
-			++char_count;
+			//++char_count;
+			++ctx->current_line->length;
 			put_char(ctx, c);
 		}
 
@@ -602,7 +658,7 @@ static char tokenise_paragraph(tokenise_context* ctx, char c, bool blockquote)
 	const line_token_type type = blockquote ? line_token_type_block_paragraph : line_token_type_paragraph;
 	add_line_token(ctx, type);
 
-	return tokenise_text(ctx, c);
+	return tokenise_text(ctx, c, false);
 }
 
 static char tokenise_heading(tokenise_context* ctx, char c)
@@ -627,7 +683,7 @@ static char tokenise_heading(tokenise_context* ctx, char c)
 	// Consume space
 	c = get_char(ctx);
 
-	return tokenise_text(ctx, c);
+	return tokenise_text(ctx, c, false);
 }
 
 static char tokenise_ordered_list_arabic(tokenise_context* ctx, char c)
@@ -650,7 +706,7 @@ static char tokenise_ordered_list_arabic(tokenise_context* ctx, char c)
 			line->index = arabic_to_int_new(ctx, &ctx->peek, c, '.');
 			peek_apply(ctx, &peek);
 
-			return tokenise_text(ctx, get_char(ctx));
+			return tokenise_text(ctx, get_char(ctx), false);
 		}
 	}
 
@@ -683,7 +739,7 @@ static char tokenise_ordered_list_roman(tokenise_context* ctx, char c)
 			line->index = roman_to_int(ctx, &ctx->peek, c, len);
 			peek_apply(ctx, &peek);
 
-			return tokenise_text(ctx, get_char(ctx));
+			return tokenise_text(ctx, get_char(ctx), false);
 		}
 	}
 
@@ -702,7 +758,7 @@ static char tokenise_ordered_list_letter(tokenise_context* ctx, char c, bool blo
 		line_token* line = add_line_token(ctx, line_token_type_ordered_list_letter);
 		line->index = c - 'a' + 1;
 
-		return tokenise_text(ctx, get_char(ctx));
+		return tokenise_text(ctx, get_char(ctx), false);
 	}
 
 	return tokenise_paragraph(ctx, c, blockquote);
@@ -740,7 +796,7 @@ static char tokenise_unordered_list(tokenise_context* ctx, char c)
 		add_line_token(ctx, line_token_type_unordered_list);
 		peek_apply(ctx, &peek);
 
-		return tokenise_text(ctx, get_char(ctx));
+		return tokenise_text(ctx, get_char(ctx), false);
 	}
 
 	return tokenise_paragraph(ctx, c, false);
@@ -759,7 +815,7 @@ static char tokenise_blockquote_citation(tokenise_context* ctx, char c)
 		if (peek_char(ctx, &peek) == '-')
 			handle_peek_error(&peek, "Too many hyphens.");
 
-		return tokenise_text(ctx, get_char(ctx));
+		return tokenise_text(ctx, get_char(ctx), false);
 	}
 
 	return tokenise_paragraph(ctx, c, true);
@@ -821,7 +877,7 @@ static char tokenise_aligned(tokenise_context* ctx, char c)
 
 	add_line_token(ctx, type);
 
-	return tokenise_text(ctx, c);
+	return tokenise_text(ctx, c, false);
 }
 
 static char tokenise_bracket(tokenise_context* ctx, char c)
@@ -846,7 +902,7 @@ static char tokenise_bracket(tokenise_context* ctx, char c)
 		if (c != ' ')
 			handle_tokenise_error(ctx, "Notes must be followed by a space.");
 
-		c = tokenise_text(ctx, get_char(ctx));
+		c = tokenise_text(ctx, get_char(ctx), false);
 
 	}
 	else
@@ -884,6 +940,34 @@ static char tokenise_comment(tokenise_context* ctx, char c)
 	return tokenise_paragraph(ctx, c, false);
 }
 
+static char tokenise_table_row(tokenise_context* ctx, char c)
+{
+	add_line_token(ctx, line_token_type_table_row);
+
+	c = get_char(ctx);
+	for (;;)
+	{
+		if (c != ' ')
+			handle_tokenise_error(ctx, "Interior of table cells must be padded with a space character.");
+
+		// Consume space
+		do
+		{
+			c = get_char(ctx);
+		} while (c == ' ');
+
+		add_line_token(ctx, line_token_type_table_cell);
+
+		if (c == '|')
+			c = get_char(ctx);
+		else
+			c = tokenise_text(ctx, c, true);
+
+		if (c == '\n')
+			return get_char(ctx);
+	}
+}
+
 static void tokenise(char* data, line_tokens* out_tokens, document_metadata* metadata)
 {
 	tokenise_context ctx = {
@@ -914,6 +998,8 @@ static void tokenise(char* data, line_tokens* out_tokens, document_metadata* met
 	{
 		if (c == 0)
 			break;
+		else if (c == '|')
+			c = tokenise_table_row(&ctx, c);
 		else if (c == '/')
 			c = tokenise_comment(&ctx, c);
 		else if (c == '{')

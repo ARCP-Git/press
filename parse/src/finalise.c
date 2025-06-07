@@ -18,6 +18,16 @@ typedef struct
 	bool				within_note;
 } finalise_context;
 
+static line_token* finalise_peek_next_token(finalise_context* ctx, uint32_t* token_index)
+{
+	assert(*token_index < ctx->token_count);
+
+	line_token* token = &ctx->tokens[*token_index];
+	++(*token_index);
+
+	return token;
+}
+
 static line_token* finalise_get_next_token(finalise_context* ctx)
 {
 	assert(ctx->current_token < ctx->token_count);
@@ -25,7 +35,7 @@ static line_token* finalise_get_next_token(finalise_context* ctx)
 	return &ctx->tokens[ctx->current_token++];
 }
 
-static void finalise_add_element(finalise_context* ctx, document_element_type type, const char* text)
+static document_element* finalise_add_element(finalise_context* ctx, document_element_type type, const char* text)
 {
 	document_element* element;
 
@@ -50,6 +60,8 @@ static void finalise_add_element(finalise_context* ctx, document_element_type ty
 
 	element->type = type;
 	element->text = text;
+
+	return element;
 }
 
 static line_token* finalise_paragraph(finalise_context* ctx, line_token* token)
@@ -299,6 +311,53 @@ static line_token* finalise_dinkus(finalise_context* ctx)
 	return finalise_get_next_token(ctx);
 }
 
+// TODO: Check tables function correctly at the end of the text document
+static line_token* finalise_table(finalise_context* ctx, line_token* token)
+{
+	document_element* element = finalise_add_element(ctx, document_element_type_table, nullptr);
+
+	uint32_t peek = ctx->current_token;
+
+	uint32_t row_count = 0;
+	uint32_t column_count = 0;
+
+	while (token->type != line_token_type_newline)
+	{
+		++row_count;
+		column_count = 0;
+
+		token = finalise_peek_next_token(ctx, &peek);
+		while (token->type == line_token_type_table_cell)
+		{
+			++column_count;
+			token = finalise_peek_next_token(ctx, &peek);
+		}
+	}
+
+	const int64_t size = sizeof(document_table) + (sizeof(const char*) * row_count * column_count);
+	element->table = (document_table*)mem_alloc(size);
+	element->table->width = column_count;
+	element->table->height = row_count;
+
+	uint32_t i = 0;
+	for (uint32_t y = 0; y < row_count; ++y)
+	{
+		for (uint32_t x = 0; x < column_count; ++x)
+		{
+			token = finalise_get_next_token(ctx);
+
+			if (token->length)
+				element->table->text_elements[i++] = token->text;
+			else
+				element->table->text_elements[i++] = nullptr;
+		}
+
+		token = finalise_get_next_token(ctx);
+	}
+
+	return token;
+}
+
 static void finalise(line_tokens* tokens, const doc_mem_req* mem_req, document* out_doc)
 {
 	const size_t chapter_size = sizeof(document_chapter) * mem_req->chapter_count;
@@ -372,6 +431,7 @@ static void finalise(line_tokens* tokens, const doc_mem_req* mem_req, document* 
 			break;
 		case line_token_type_preformatted:
 			//token = finalise_preformatted(&ctx, token);
+			token = finalise_get_next_token(&ctx);
 			break;
 		case line_token_type_right_aligned:
 			token = finalise_right_aligned(&ctx, token);
@@ -396,6 +456,9 @@ static void finalise(line_tokens* tokens, const doc_mem_req* mem_req, document* 
 			break;
 		case line_token_type_unordered_list:
 			token = finalise_unordered_list(&ctx, token);
+			break;
+		case line_token_type_table_row:
+			token = finalise_table(&ctx, token);
 			break;
 		default:
 			token = finalise_get_next_token(&ctx);

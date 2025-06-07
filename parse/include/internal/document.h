@@ -21,12 +21,13 @@ typedef enum
 	text_token_type_quote_level_2_end		= 14,
 	text_token_type_left_square_bracket		= 15,
 	text_token_type_right_square_bracket	= 16,
-	text_token_type_fraction_slash			= 17,	// Allows
+	text_token_type_fraction_slash			= 17,	// Allows representing typographic fractions
 	text_token_type_joiner					= 18	// '_' markup that would be ambiguous (e.g., "15_1//2", will join the 15 with the fraction 1//2)
 } text_token_type;
 
 typedef enum
 {
+	document_element_type_table,
 	document_element_type_dinkus,
 	document_element_type_heading_1,
 	document_element_type_heading_2,
@@ -80,17 +81,22 @@ typedef struct
 	uint32_t		translator_count;
 } document_metadata;
 
-//typedef struct
-//{
-//	uint32_t		width;
-//	uint32_t		height;
-//	const char**	
-//} document_table;
+typedef struct
+{
+	uint32_t		width;
+	uint32_t		height;
+	const char*		text_elements[];
+} document_table;
 
 typedef struct
 {
 	document_element_type	type;
-	const char*				text;
+
+	union
+	{
+		const char*			text;
+		document_table*		table;
+	};
 } document_element;
 
 typedef struct

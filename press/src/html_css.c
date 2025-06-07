@@ -195,7 +195,33 @@ static void output_css(html_context* ctx)
 		"	color: light-dark(#000000, #E0E0E0);\n"
 		"	content: '* * *';\n"
 		"	display: block;\n"
-		"	text-align:center;\n"
+		"	text-align: center;\n"
 		"}\n"
+
+		// Tables
+		"table {\n"
+		"	border-collapse: collapse;\n"
+		"	padding: 0;\n"
+		"	margin-top: 1em;\n"
+		"	margin-bottom: 1em;\n"
+		"	margin-left: auto;\n"
+		"	margin-right: auto;\n"
+		"}\n"
+
+		"th, td {\n"
+		"	font-size: 0.75em;\n"
+		"	padding-left: 1em;\n"
+		"	vertical-align: top;\n"
+		"}\n"
+
+		// Each cell is padded on the left except the first one on each row
+		"tr td:first-child {\n"
+		"	padding-left: 0;\n"
+		"}\n"
+
+		// Paragraphs after tables
+		"table + p {\n"
+		"	text-indent: 0;\n"
+		"}\n\n"
 	);
 }

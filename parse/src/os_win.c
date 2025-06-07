@@ -14,8 +14,8 @@
 
 #define PAGE_SIZE (INT64_C(4) << 10)
 #define VMEM_SIZE (INT64_C(64) << 20)
-static_assert((PAGE_SIZE & (PAGE_SIZE - 1)) == 0); // Ensure power of two
-static_assert(VMEM_SIZE % PAGE_SIZE == 0); // Ensure multiple of page size
+static_assert((PAGE_SIZE & (PAGE_SIZE - 1)) == 0);	// Ensure power of two
+static_assert(VMEM_SIZE % PAGE_SIZE == 0);			// Ensure multiple of page size
 
 static uint8_t* mem_begin;
 static uint8_t* mem_current;

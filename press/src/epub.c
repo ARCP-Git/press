@@ -349,6 +349,33 @@ static void create_epub_chapter(const document* doc, uint32_t index)
 
 		switch (element->type)
 		{
+		case document_element_type_table:
+			{
+				print_tabs(f, depth);
+				print_str(f, "<table>");
+
+				uint32_t i = 0;
+				for (uint32_t y = 0; y < element->table->height; ++y)
+				{
+					print_tabs(f, depth + 1);
+					print_str(f, "<tr>");
+
+					for (uint32_t x = 0; x < element->table->width; ++x)
+					{
+						print_tabs(f, depth + 2);
+						print_str(f, "<td>");
+						print_html_text_block(&ctx, element->table->text_elements[i++]);
+						print_str(f, "</td>");
+					}
+
+					print_tabs(f, depth + 1);
+					print_str(f, "</tr>");
+				}
+
+				print_tabs(f, depth);
+				print_str(f, "</table>");
+			}
+			break;
 		case document_element_type_dinkus:
 			print_tabs(f, depth);
 			print_str(f, "<div class=\"dinkus\">* * *</div>");

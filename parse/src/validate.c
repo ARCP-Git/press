@@ -300,6 +300,46 @@ static line_token* validate_dinkus(validate_context* ctx)
 	return token;
 }
 
+static line_token* validate_table(validate_context* ctx)
+{
+	line_token* token;
+
+	// Only a single element because tables use their own allocations
+	++ctx->element_count;
+
+	// Preserve line number so we can point to the beginning of the table if an error is found
+	uint32_t line = ctx->line;
+
+	// Count number of columns for later comparison
+	uint32_t first_column_count = 0;
+	while ((token = validate_get_next_token(ctx))->type == line_token_type_table_cell)
+		++first_column_count;
+
+	for (;;)
+	{
+		if (token->type == line_token_type_table_row)
+		{
+			uint32_t column_count = 0;
+			while ((token = validate_get_next_token(ctx))->type == line_token_type_table_cell)
+				++column_count;
+
+			if (column_count != first_column_count)
+			{
+				ctx->line = line;
+				handle_validate_error(ctx, "All table rows must contain the same number of columns.");
+			}
+		}
+		else if (token->type == line_token_type_newline)
+		{
+			return token;
+		}
+		else
+		{
+			handle_validate_error(ctx, "Tables must be followed by a blank line.");
+		}
+	}
+}
+
 static void validate(line_tokens* tokens, doc_mem_req* out_mem_req)
 {
 	validate_context ctx = {
@@ -372,6 +412,8 @@ static void validate(line_tokens* tokens, doc_mem_req* out_mem_req)
 		case line_token_type_unordered_list:
 			token = validate_unordered_list(&ctx, token);
 			break;
+		case line_token_type_table_row:
+			token = validate_table(&ctx);
 		default:
 			token = validate_get_next_token(&ctx);
 		}

@@ -1,3 +1,4 @@
+// TODO: Rename to token_type because tokens are no longer restricted to lines (e.g., tables)
 typedef enum
 {
 	line_token_type_none,
@@ -21,7 +22,10 @@ typedef enum
 	line_token_type_paragraph_break,
 	line_token_type_ordered_list_roman,
 	line_token_type_ordered_list_arabic,
-	line_token_type_ordered_list_letter
+	line_token_type_ordered_list_letter,
+	line_token_type_table_row,
+	line_token_type_table_cell,
+	line_token_type_table_header
 } line_token_type;
 
 typedef struct
