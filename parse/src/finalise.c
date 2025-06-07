@@ -127,6 +127,53 @@ static line_token* finalise_heading_5(finalise_context* ctx, line_token* token)
 	return finalise_get_next_token(ctx);
 }
 
+// TODO: Check tables function correctly at the end of the text document
+static line_token* finalise_table(finalise_context* ctx, line_token* token)
+{
+	document_element* element = finalise_add_element(ctx, document_element_type_table, nullptr);
+
+	uint32_t peek = ctx->current_token;
+
+	uint32_t row_count = 0;
+	uint32_t column_count = 0;
+
+	while (token->type != line_token_type_newline)
+	{
+		++row_count;
+		column_count = 0;
+
+		token = finalise_peek_next_token(ctx, &peek);
+		while (token->type == line_token_type_table_cell)
+		{
+			++column_count;
+			token = finalise_peek_next_token(ctx, &peek);
+		}
+	}
+
+	const int64_t size = sizeof(document_table) + (sizeof(const char*) * row_count * column_count);
+	element->table = (document_table*)mem_alloc(size);
+	element->table->width = column_count;
+	element->table->height = row_count;
+
+	uint32_t i = 0;
+	for (uint32_t y = 0; y < row_count; ++y)
+	{
+		for (uint32_t x = 0; x < column_count; ++x)
+		{
+			token = finalise_get_next_token(ctx);
+
+			if (token->length)
+				element->table->text_elements[i++] = token->text;
+			else
+				element->table->text_elements[i++] = nullptr;
+		}
+
+		token = finalise_get_next_token(ctx);
+	}
+
+	return token;
+}
+
 static line_token* finalise_note(finalise_context* ctx, line_token* token)
 {
 	assert(ctx->current_note < ctx->note_count);
@@ -156,6 +203,8 @@ static line_token* finalise_note(finalise_context* ctx, line_token* token)
 			token = finalise_paragraph(ctx, token);
 		else if (token->type == line_token_type_newline)
 			token = finalise_get_next_token(ctx);
+		else if (token->type == line_token_type_table_row)
+			token = finalise_table(ctx, token);
 //		else if (token->type == line_token_type_heading_1 || token->type == line_token_type_reference)
 //			break;
 		else
@@ -309,53 +358,6 @@ static line_token* finalise_dinkus(finalise_context* ctx)
 	finalise_add_element(ctx, document_element_type_dinkus, nullptr);
 
 	return finalise_get_next_token(ctx);
-}
-
-// TODO: Check tables function correctly at the end of the text document
-static line_token* finalise_table(finalise_context* ctx, line_token* token)
-{
-	document_element* element = finalise_add_element(ctx, document_element_type_table, nullptr);
-
-	uint32_t peek = ctx->current_token;
-
-	uint32_t row_count = 0;
-	uint32_t column_count = 0;
-
-	while (token->type != line_token_type_newline)
-	{
-		++row_count;
-		column_count = 0;
-
-		token = finalise_peek_next_token(ctx, &peek);
-		while (token->type == line_token_type_table_cell)
-		{
-			++column_count;
-			token = finalise_peek_next_token(ctx, &peek);
-		}
-	}
-
-	const int64_t size = sizeof(document_table) + (sizeof(const char*) * row_count * column_count);
-	element->table = (document_table*)mem_alloc(size);
-	element->table->width = column_count;
-	element->table->height = row_count;
-
-	uint32_t i = 0;
-	for (uint32_t y = 0; y < row_count; ++y)
-	{
-		for (uint32_t x = 0; x < column_count; ++x)
-		{
-			token = finalise_get_next_token(ctx);
-
-			if (token->length)
-				element->table->text_elements[i++] = token->text;
-			else
-				element->table->text_elements[i++] = nullptr;
-		}
-
-		token = finalise_get_next_token(ctx);
-	}
-
-	return token;
 }
 
 static void finalise(line_tokens* tokens, const doc_mem_req* mem_req, document* out_doc)

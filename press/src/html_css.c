@@ -121,6 +121,20 @@ static void output_css(html_context* ctx)
 		"	font-size: 0.75em;\n"
 		"}\n\n"
 
+		// Paragraphs after tables
+		"table + p.footnote_paragraph {\n"
+		"	text-indent: 0;\n"
+		"}\n\n"
+
+		"p.footnote + table, p.footnote_paragraph + table {\n"
+		"	margin-top: 0.75em;\n"
+		"	margin-bottom: 0.75em;\n"
+		"}\n\n"
+
+		"table + p.footnote {\n"
+		"	margin-top: 0.75em;\n"
+		"}\n\n"
+
 		// Footnotes following another footnote
 		"p.footnote_paragraph + p.footnote {\n"
 		"	margin-top: 1em;\n"

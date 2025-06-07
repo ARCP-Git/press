@@ -379,6 +379,36 @@ static void generate_html(const document* doc)
 
 					switch (element->type)
 					{
+					case document_element_type_table:
+						{
+							print_tabs(f, depth);
+							print_str(f, "<table>");
+
+							uint32_t i = 0;
+							for (uint32_t y = 0; y < element->table->height; ++y)
+							{
+								print_tabs(f, depth + 1);
+								print_str(f, "<tr>");
+
+								for (uint32_t x = 0; x < element->table->width; ++x)
+								{
+									print_tabs(f, depth + 2);
+									print_str(f, "<td>");
+
+									const char* text = element->table->text_elements[i++];
+									if (text)
+										print_html_text_block(&ctx, text);
+									print_str(f, "</td>");
+								}
+
+								print_tabs(f, depth + 1);
+								print_str(f, "</tr>");
+							}
+
+							print_tabs(f, depth);
+							print_str(f, "</table>");
+						}
+					break;
 					case document_element_type_text_block:
 						print_html_text_block(&ctx, element->text);
 						break;

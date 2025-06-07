@@ -1213,52 +1213,17 @@ every godless crime---money!
 
 [55] As an example of how little ready money is required in true commercial operations, I give below a statement by one of the largest London houses of its yearly receipts and payments. Its transactions during the year 1856, extending to many millions of pounds sterling, are here reduced to the scale of one million.
 
-Receipts
+| **Receipts**                                     |            | **Payments**              |            |
+| Bankers' and merchants' bills payable after date | £533,596   | Bills payable after date  | £302,674   |
+| Cheques on bankers, etc., payable on demand      | £357,715   | Cheques on London bankers | £663,672   |
+| Country notes                                    | £9,627     | Bank of England notes     | £22,743    |
+| Bank of England notes                            | £68,554    | Gold                      | £9,427     |
+| Gold                                             | £28,089    | Silver and copper         | £1,484     |
+| Silver and copper                                | £1,486     |                           |            |
+| Post Office orders                               | £933       |                           |            |
+| Total                                            | £1,000,000 | Total                     | £1,000,000 |
 
-Bankers' and merchants' bills payable after date---£533,596
-Cheques on bankers, etc., payable on demand---£357,715
-Country notes---£9,627
-Bank of England notes---£68,554
-Gold---£28,089
-Silver and copper---£1,486
-Post Office orders---£933
-Total---£1,000,000
-
-Payments
-
-Bills payable after date---£302,674
-Cheques on London bankers---£663,672
-Bank of England notes---£22,743
-Gold---£9,427
-Silver and copper---£1,484
-Total---£1,000,000
-//
-// TODO: Add table support
-/*
-| Receipts                                         |            |
-|--------------------------------------------------|------------|
-| Bankers' and merchants' bills payable after date | £533,596   |
-| Cheques on bankers, etc., payable on demand      | £357,715   |
-| Country notes                                    | £9,627     |
-| Bank of England notes                            | £68,554    |
-| Gold                                             | £28,089    |
-| Silver and copper                                | £1,486     |
-| Post Office orders                               | £933       |
-|__________________________________________________|____________|
-| Total                                            | £1,000,000 |
-
-| Payments                                         |            |
-|--------------------------------------------------|------------|
-| Bills payable after date                         | £302,674   |
-| Cheques on London bankers                        | £663,672   |
-| Bank of England notes                            | £22,743    |
-| Gold                                             | £9,427     |
-| Silver and copper                                | £1,484     |
-|__________________________________________________|____________|
-| Total                                            | £1,000,000 |
-*/
 (*Report from the Select Committee on the Bank Acts, July, 1858*, p. lxxi.)
-//
 
 [56] "The course of trade being thus turned, from exchanging of goods for goods, or delivering and taking, to selling and paying, all the bargains...are now stated upon the foot of a Price in money" (*An Essay upon Publick Credit*, 3rd ed. London, 1710, p. 8).
 
