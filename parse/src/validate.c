@@ -129,9 +129,9 @@ static line_token* validate_note(validate_context* ctx, line_token* token)
 	++ctx->note_count;
 	ctx->note_element_count += 3;
 
-	token = validate_get_next_token(ctx);
-	if (token->type != line_token_type_newline)
-		handle_validate_error(ctx, "Notes must be followed by a blank line.");
+	//token = validate_get_next_token(ctx);
+	//if (token->type != line_token_type_newline)
+	//	handle_validate_error(ctx, "Notes must be followed by a blank line.");
 
 	token = validate_get_next_token(ctx);
 	for (;;)

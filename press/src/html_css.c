@@ -100,6 +100,17 @@ static void output_css(html_context* ctx)
 		"	text-indent: 0;\n"
 		"}\n\n"
 
+		// Paragraph with previous gap
+		"p.footnote-paragraph-break {\n"
+		"	font-size: 0.75em;\n"
+		"	margin-top: 1em;\n"
+		"	text-indent: 0;\n"
+		"}\n\n"
+
+		"p.footnote-paragraph-break + p.footnote {\n"
+		"	margin-top: 1em;\n"
+		"}\n\n"
+
 		// Authors
 		"p.authors {\n"
 		"	text-align: center;\n"

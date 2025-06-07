@@ -429,7 +429,7 @@ static void generate_html(const document* doc)
 						break;
 					case document_element_type_paragraph_break_begin:
 						print_tabs(f, depth);
-						print_str(f, "<p class=\"paragraph-break\">");
+						print_str(f, "<p class=\"footnote-paragraph-break\">");
 						break;
 					case document_element_type_paragraph_end:
 						print_str(f, "</p>");

@@ -174,6 +174,29 @@ static line_token* finalise_table(finalise_context* ctx, line_token* token)
 	return token;
 }
 
+static line_token* finalise_paragraph_break(finalise_context* ctx, line_token* token)
+{
+	// Skip empty lines
+	token = finalise_get_next_token(ctx);
+	while (token->type == line_token_type_newline)
+		token = finalise_get_next_token(ctx);
+
+	finalise_add_element(ctx, document_element_type_paragraph_break_begin, nullptr);
+	finalise_add_element(ctx, document_element_type_text_block, token->text);
+
+	token = finalise_get_next_token(ctx);
+	while (token->type == line_token_type_paragraph)
+	{
+		finalise_add_element(ctx, document_element_type_line_break, nullptr);
+		finalise_add_element(ctx, document_element_type_text_block, token->text);
+		token = finalise_get_next_token(ctx);
+	}
+
+	finalise_add_element(ctx, document_element_type_paragraph_end, nullptr);
+
+	return token;
+}
+
 static line_token* finalise_note(finalise_context* ctx, line_token* token)
 {
 	assert(ctx->current_note < ctx->note_count);
@@ -203,10 +226,10 @@ static line_token* finalise_note(finalise_context* ctx, line_token* token)
 			token = finalise_paragraph(ctx, token);
 		else if (token->type == line_token_type_newline)
 			token = finalise_get_next_token(ctx);
+		else if (token->type == line_token_type_paragraph_break)
+			token = finalise_paragraph_break(ctx, token);
 		else if (token->type == line_token_type_table_row)
 			token = finalise_table(ctx, token);
-//		else if (token->type == line_token_type_heading_1 || token->type == line_token_type_reference)
-//			break;
 		else
 			break;
 	}
@@ -292,29 +315,6 @@ static line_token* finalise_blockquote(finalise_context* ctx, line_token* token)
 	}
 
 	finalise_add_element(ctx, document_element_type_blockquote_end, nullptr);
-
-	return token;
-}
-
-static line_token* finalise_paragraph_break(finalise_context* ctx, line_token* token)
-{
-	// Skip empty lines
-	token = finalise_get_next_token(ctx);
-	while (token->type == line_token_type_newline)
-		token = finalise_get_next_token(ctx);
-
-	finalise_add_element(ctx, document_element_type_paragraph_break_begin, nullptr);
-	finalise_add_element(ctx, document_element_type_text_block, token->text);
-
-	token = finalise_get_next_token(ctx);
-	while (token->type == line_token_type_paragraph)
-	{
-		finalise_add_element(ctx, document_element_type_line_break, nullptr);
-		finalise_add_element(ctx, document_element_type_text_block, token->text);
-		token = finalise_get_next_token(ctx);
-	}
-
-	finalise_add_element(ctx, document_element_type_paragraph_end, nullptr);
 
 	return token;
 }
