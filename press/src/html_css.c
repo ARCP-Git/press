@@ -221,7 +221,7 @@ static void output_css(html_context* ctx)
 		"	content: '* * *';\n"
 		"	display: block;\n"
 		"	text-align: center;\n"
-		"}\n"
+		"}\n\n"
 
 		// Tables
 		"table {\n"
@@ -231,22 +231,26 @@ static void output_css(html_context* ctx)
 		"	margin-bottom: 1em;\n"
 		"	margin-left: auto;\n"
 		"	margin-right: auto;\n"
-		"}\n"
+		"}\n\n"
 
 		"th, td {\n"
 		"	font-size: 0.75em;\n"
 		"	padding-left: 1em;\n"
 		"	vertical-align: top;\n"
-		"}\n"
+		"}\n\n"
 
 		// Each cell is padded on the left except the first one on each row
 		"tr td:first-child {\n"
 		"	padding-left: 0;\n"
-		"}\n"
+		"}\n\n"
 
 		// Paragraphs after tables
 		"table + p {\n"
 		"	text-indent: 0;\n"
+		"}\n\n"
+
+		"td:empty::after {\n"
+		"	content: \"\\00A0\";\n"
 		"}\n\n"
 	);
 }
