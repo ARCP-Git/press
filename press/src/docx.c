@@ -508,6 +508,7 @@ static void generate_docx(const document* doc)
 	create_docx_numbering();
 	create_docx_document(doc);
 
+	// The following two arrays MUST be in sync
 	const char* inputs[] = {
 		OUTPUT_DIR "/docx/[Content_Types].xml",
 		OUTPUT_DIR "/docx/_rels/.rels",

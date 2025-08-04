@@ -412,6 +412,7 @@ static void generate_odt(const document* doc)
 	create_odt_styles();
 	generate_odt_content(doc);
 
+	// The following two arrays MUST be in sync
 	const char* inputs[] = {
 		OUTPUT_DIR "/odt/mimetype",
 		OUTPUT_DIR "/odt/META-INF/manifest.xml",
