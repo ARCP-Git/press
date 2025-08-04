@@ -1,5 +1,6 @@
 // https://pkware.cachefly.net/webdocs/APPNOTE/APPNOTE-6.3.9.TXT
 
+// TODO: Add deflate compression support
 enum
 {
 	compression_type_none = 0,
@@ -163,7 +164,7 @@ static void generate_zip(const char* filepath, const char** input_files, const c
 		zip_local_file_header* local = (zip_local_file_header*)current_data;
 		current_data += sizeof(zip_local_file_header);
 
-		// File path directory follows header
+		// File path follows local header
 		memcpy(current_data, output_files[i], filename_lengths[i]);
 		current_data += filename_lengths[i];
 
@@ -204,9 +205,11 @@ static void generate_zip(const char* filepath, const char** input_files, const c
 		current_dir->extra_field_len			= 0x0000;
 		current_dir->comment_len				= 0x0000;
 		current_dir->disk_number_start			= 0x0000;
-		current_dir->internal_file_attributes	= 0x0001;
+		current_dir->internal_file_attributes	= 0x0000;
 		current_dir->external_file_attributes	= 0x00000020;
 		current_dir->local_header_offset		= (uint32_t)((uint8_t*)local - zip_data);
+
+		// File path follows central directory header
 		memcpy(current_dir + 1, output_files[i], filename_lengths[i]);
 
 		current_dir = (zip_central_directory_header*)((uint8_t*)current_dir + sizeof(zip_central_directory_header) + filename_lengths[i]);

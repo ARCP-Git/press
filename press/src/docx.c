@@ -519,12 +519,12 @@ static void generate_docx(const document* doc)
 	const uint32_t input_count = sizeof(inputs) / sizeof(const char*);
 
 	const char* outputs[] = {
+		"[Content_Types].xml",
 		"_rels/.rels",
 		"word/_rels/document.xml.rels",
 		"word/styles.xml",
 		"word/numbering.xml",
-		"word/document.xml",
-		"[Content_Types].xml"
+		"word/document.xml"
 	};
 	static_assert(sizeof(outputs) == sizeof(inputs));
 	const uint32_t output_count = sizeof(outputs) / sizeof(const char*);
@@ -532,5 +532,5 @@ static void generate_docx(const document* doc)
 	const char* odt_path = generate_path(OUTPUT_DIR "/%s.docx", doc->metadata.filename);
 	generate_zip(odt_path, inputs, outputs, output_count);
 
-	//delete_dir(OUTPUT_DIR "\\docx");
+	delete_dir(OUTPUT_DIR "\\docx");
 }
