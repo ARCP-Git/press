@@ -4,10 +4,11 @@ static void print_usage(void)
 {
 	fprintf(stderr,
 		"Usage:\n"
-		"  press <src.txt> [--odt|--html|--epub]\n"
+		"  press <src.txt> [--docx|--odt|--html|--epub]\n"
 		"\n"
 		"Flags:\n"
 		"  none    validates source file and produces no output\n"
+		"  --docx  generates Word document\n\n"
 		"  --odt   generates ODT OpenDocument text file\n\n"
 		"  --html  generates HTML webpage\n\n"
 		"  --epub  generates ePub2 eBook\n\n"
@@ -24,6 +25,7 @@ static void kpress_on_error(const char* str)
 int main(int argc, const char** argv)
 {
 	bool odt = false;
+	bool docx = false;
 	bool html = false;
 	bool epub = false;
 	const char* epub_cover = nullptr;
@@ -116,6 +118,10 @@ int main(int argc, const char** argv)
 				{
 					odt = true;
 				}
+				else if (strcmp(argv[i], "--docx") == 0)
+				{
+					docx = true;
+				}
 				else if (strcmp(argv[i], "--html") == 0)
 				{
 					html = true;
@@ -151,7 +157,7 @@ int main(int argc, const char** argv)
 	if (!filepath_count)
 		handle_error("No source file specified.");
 
-	const bool generate = odt || html || epub;
+	const bool generate = odt || docx || html || epub;
 	if (generate)
 	{
 		delete_dir(output_dir);
@@ -183,6 +189,8 @@ int main(int argc, const char** argv)
 		{
 			if (odt)
 				generate_odt(&doc);
+			if (docx)
+				generate_docx(&doc);
 			if (html)
 				generate_html(&doc);
 			if (epub)

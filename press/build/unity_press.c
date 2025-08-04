@@ -10,6 +10,7 @@
 #include "../src/odt.c"
 #include "../src/epub.c"
 #include "../src/html.c"
+#include "../src/docx.c"
 #include "../src/crc32.c"
 #include "../src/html_css.c"
 
