@@ -1,5 +1,11 @@
 // https://pkware.cachefly.net/webdocs/APPNOTE/APPNOTE-6.3.9.TXT
 
+enum
+{
+	compression_type_none = 0,
+	compression_type_deflate = 8
+};
+
 static uint32_t crc32_compute_buffer(uint32_t crc_in, const void* buffer, size_t size);
 
 #pragma pack(push, 1)
@@ -70,12 +76,10 @@ void get_dos_date_time(uint16_t* out_date, uint16_t* out_time)
 	time_t t = time(nullptr);
 	struct tm* gm = gmtime(&t);
 
-	int year = gm->tm_year + 80;	// DOS times start from 1980 instead of 1900
-
-	uint16_t dos_date = 0;
-	dos_date |= year << 9;			// Bits 9-15
-	dos_date |= gm->tm_mon << 4;	// Bits 5-8
-	dos_date |= gm->tm_mday;		// Bits 0-4
+	const int year = (gm->tm_year - 80) << 9;	// Bits 9-15, DOS times start from 1980 instead of 1900
+	const int month = (gm->tm_mon + 1) << 5;	// Bits 5-8
+	const int day = gm->tm_mday;				// Bits 0-4
+	const uint16_t dos_date = year | month | day;
 
 	uint16_t dos_time = 0;
 	dos_time |= gm->tm_hour << 11;	// Bits 11-15
@@ -173,6 +177,7 @@ static void generate_zip(const char* filepath, const char** input_files, const c
 		local->signature[2]			= 0x03;
 		local->signature[3]			= 0x04;
 		local->version				= 0x0014;	// Version 2.0
+		local->flags				= 0x0000;
 		local->compression_type		= 0x0000;	// No Compression
 		local->last_file_time		= time;
 		local->last_file_date		= date;
