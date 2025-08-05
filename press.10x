@@ -7,19 +7,7 @@
 		<Recursive>true</Recursive>
 		<ShowEmptyFolders>true</ShowEmptyFolders>
 		<IncludeFilesWithoutExt>false</IncludeFilesWithoutExt>
-		<IsVirtual>false</IsVirtual>
 		<IsFolder>false</IsFolder>
-		<BuildCommand>build\build_win_msvc.bat $(Configuration)</BuildCommand>
-		<RebuildCommand></RebuildCommand>
-		<BuildFileCommand></BuildFileCommand>
-		<CleanCommand></CleanCommand>
-		<BuildWorkingDirectory></BuildWorkingDirectory>
-		<CancelBuild></CancelBuild>
-		<Exe></Exe>
-		<Args></Args>
-		<WorkingDirectory></WorkingDirectory>
-		<DebugCommand></DebugCommand>
-		<DebugSln></DebugSln>
 		<UseVisualStudioEnvBat>false</UseVisualStudioEnvBat>
 		<CaptureExeOutput>false</CaptureExeOutput>
 		<Configurations>
@@ -36,11 +24,52 @@
 		<ConfigProperties>
 			<ConfigAndPlatform>
 				<Name>Debug:x64</Name>
+				<BuildCommand></BuildCommand>
+				<RebuildCommand></RebuildCommand>
+				<BuildFileCommand></BuildFileCommand>
+				<CleanCommand></CleanCommand>
+				<BuildWorkingDirectory></BuildWorkingDirectory>
+				<CancelBuild></CancelBuild>
+				<Exe></Exe>
+				<Args></Args>
+				<WorkingDirectory></WorkingDirectory>
+				<DebugCommand></DebugCommand>
+				<DebuggerExe></DebuggerExe>
+				<DebugSln></DebugSln>
 				<Defines></Defines>
 				<ForceIncludes></ForceIncludes>
 			</ConfigAndPlatform>
 			<ConfigAndPlatform>
 				<Name>debug:x64</Name>
+				<BuildCommand>build\build_win_msvc.bat $(Configuration)</BuildCommand>
+				<RebuildCommand></RebuildCommand>
+				<BuildFileCommand></BuildFileCommand>
+				<CleanCommand></CleanCommand>
+				<BuildWorkingDirectory></BuildWorkingDirectory>
+				<CancelBuild></CancelBuild>
+				<Exe></Exe>
+				<Args></Args>
+				<WorkingDirectory></WorkingDirectory>
+				<DebugCommand></DebugCommand>
+				<DebuggerExe></DebuggerExe>
+				<DebugSln></DebugSln>
+				<Defines></Defines>
+				<ForceIncludes></ForceIncludes>
+			</ConfigAndPlatform>
+			<ConfigAndPlatform>
+				<Name>release:x64</Name>
+				<BuildCommand>build\build_win_msvc.bat $(Configuration)</BuildCommand>
+				<RebuildCommand></RebuildCommand>
+				<BuildFileCommand></BuildFileCommand>
+				<CleanCommand></CleanCommand>
+				<BuildWorkingDirectory></BuildWorkingDirectory>
+				<CancelBuild></CancelBuild>
+				<Exe></Exe>
+				<Args></Args>
+				<WorkingDirectory></WorkingDirectory>
+				<DebugCommand></DebugCommand>
+				<DebuggerExe></DebuggerExe>
+				<DebugSln></DebugSln>
 				<Defines></Defines>
 				<ForceIncludes></ForceIncludes>
 			</ConfigAndPlatform>

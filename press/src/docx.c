@@ -81,6 +81,8 @@ static void create_docx_styles(void)
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
 
+// Not currently used
+/*
 		"\t<w:style w:type=\"paragraph\" w:styleId=\"Title\">\n"
 		"\t\t<w:name w:val=\"Title\"/>\n"
 		"\t\t<w:next w:val=\"Normal\"/>\n"
@@ -113,6 +115,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:sz w:val=\"44\"/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+*/
 
 		"\t<w:style w:type=\"paragraph\" w:styleId=\"Heading1\">\n"
 		"\t\t<w:name w:val=\"heading 1\"/>\n"
@@ -275,22 +278,8 @@ static void create_docx_styles(void)
 		"\t\t</w:pPr>\n"
 		"\t</w:style>\n"
 
-		"\t<w:style w:type=\"paragraph\" w:customStyle=\"1\" w:styleId=\"BlockQuote\">\n"
-		"\t\t<w:name w:val=\"Block Quote\"/>\n"
-		"\t\t<w:basedOn w:val=\"Normal\"/>\n"
-		"\t\t<w:next w:val=\"QuoteBlockCitation\"/>\n"
-		"\t\t<w:qFormat/>\n"
-		"\t\t<w:pPr>\n"
-		"\t\t\t<w:spacing w:before=\"240\" w:after=\"240\"/>\n"
-		"\t\t\t<w:ind w:left=\"567\" w:right=\"567\"/>\n"
-		"\t\t</w:pPr>\n"
-		"\t\t<w:rPr>\n"
-		"\t\t\t<w:rFonts w:ascii=\"Georgia\" w:hAnsi=\"Georgia\"/>\n"
-		"\t\t</w:rPr>\n"
-		"\t</w:style>\n"
-
-		"\t<w:style w:type=\"paragraph\" w:customStyle=\"1\" w:styleId=\"QuoteBlockCitation\">\n"
-		"\t\t<w:name w:val=\"Quote Block Citation\"/>\n"
+		"\t<w:style w:type=\"paragraph\" w:customStyle=\"1\" w:styleId=\"BlockquoteCitation\">\n"
+		"\t\t<w:name w:val=\"Blockquote Citation\"/>\n"
 		"\t\t<w:qFormat/>\n"
 		"\t\t<w:pPr>\n"
 		"\t\t\t<w:spacing w:after=\"240\"/>\n"
@@ -355,6 +344,8 @@ static void create_docx_styles(void)
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
 
+// Not currently used
+/*
 		"\t<w:style w:type=\"character\" w:customStyle=\"1\" w:styleId=\"TitleChar\">\n"
 		"\t\t<w:name w:val=\"Title Char\"/>\n"
 		"\t\t<w:basedOn w:val=\"DefaultParagraphFont\"/>\n"
@@ -376,6 +367,8 @@ static void create_docx_styles(void)
 		"\t\t\t<w:sz w:val=\"44\"/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+*/
+
 		"</w:styles>"
 	);
 
@@ -597,7 +590,7 @@ static void create_docx_document(const document* doc)
 			case document_element_type_blockquote_citation:
 				print_str(f,
 					"\t\t<w:p>\n"
-					"\t\t\t<w:pPr><w:pStyle w:val=\"QuoteBlockCitation\"/></w:pPr>\n"
+					"\t\t\t<w:pPr><w:pStyle w:val=\"BlockquoteCitation\"/></w:pPr>\n"
 				);
 				print_docx_text_block(f, element->text, true);
 				print_str(f, "\t\t</w:p>\n");
@@ -672,8 +665,8 @@ static void generate_docx(const document* doc)
 	static_assert(sizeof(outputs) == sizeof(inputs));
 	const uint32_t output_count = sizeof(outputs) / sizeof(const char*);
 
-	const char* odt_path = generate_path(OUTPUT_DIR "/%s.docx", doc->metadata.filename);
-	generate_zip(odt_path, inputs, outputs, output_count);
+	const char* docx_path = generate_path(OUTPUT_DIR "/%s.docx", doc->metadata.filename);
+	generate_zip(docx_path, inputs, outputs, output_count);
 
 	delete_dir(OUTPUT_DIR "\\docx");
 }

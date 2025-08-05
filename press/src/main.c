@@ -4,14 +4,14 @@ static void print_usage(void)
 {
 	fprintf(stderr,
 		"Usage:\n"
-		"  press <src.txt> [--docx|--odt|--html|--epub]\n"
+		"  press <src.txt> [--docx|--html|--epub|--all]\n"
 		"\n"
 		"Flags:\n"
 		"  none    validates source file and produces no output\n"
-		"  --docx  generates Word document\n\n"
-		"  --odt   generates ODT OpenDocument text file\n\n"
 		"  --html  generates HTML webpage\n\n"
 		"  --epub  generates ePub2 eBook\n\n"
+		"  --docx  generates Microsoft Word document\n\n"
+		"  --all   generates all supported formats\n\n"
 	);
 
 	exit(EXIT_FAILURE);
@@ -24,13 +24,12 @@ static void kpress_on_error(const char* str)
 
 int main(int argc, const char** argv)
 {
-	bool odt = false;
 	bool docx = false;
 	bool html = false;
 	bool epub = false;
 	const char* epub_cover = nullptr;
 
-	fputs("ARCP Press Tool v0.9.7\n", stdout);
+	fputs("ARC Press Tool v0.9.9\n", stdout);
 
 	mem_init();
 	void* frame = mem_push();
@@ -42,7 +41,7 @@ int main(int argc, const char** argv)
 	{
 		install_error_handler(kpress_on_error);
 
-		odt = html = epub = true;
+		html = epub = docx = true;
 
 		// Open file dialog
 		OPENFILENAMEA ofn = {
@@ -112,11 +111,7 @@ int main(int argc, const char** argv)
 			{
 				if (strcmp(argv[i], "--all") == 0)
 				{
-					odt = html = epub = true;
-				}
-				else if (strcmp(argv[i], "--odt") == 0)
-				{
-					odt = true;
+					html = epub = docx = true;
 				}
 				else if (strcmp(argv[i], "--docx") == 0)
 				{
@@ -157,7 +152,7 @@ int main(int argc, const char** argv)
 	if (!filepath_count)
 		handle_error("No source file specified.");
 
-	const bool generate = odt || docx || html || epub;
+	const bool generate = html || epub || docx;
 	if (generate)
 	{
 		delete_dir(output_dir);
@@ -187,8 +182,6 @@ int main(int argc, const char** argv)
 
 		if (generate)
 		{
-			if (odt)
-				generate_odt(&doc);
 			if (docx)
 				generate_docx(&doc);
 			if (html)
