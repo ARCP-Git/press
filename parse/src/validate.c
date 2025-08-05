@@ -10,6 +10,8 @@ typedef struct
 	uint32_t	note_element_count;
 } validate_context;
 
+void check_heading_caps(const char* heading);
+
 static void handle_validate_error(validate_context* ctx, const char* format, ...)
 {
 	fprintf(stderr, "Parsing error (line %u): ", ctx->line);
@@ -71,6 +73,8 @@ static line_token* validate_heading(validate_context* ctx, line_token* token)
 	const int level = token->type - line_token_type_heading_1;
 	assert(level >= 0);
 	assert(level <= 5);
+
+	check_heading_caps(token->text);
 
 	++ctx->element_count;
 

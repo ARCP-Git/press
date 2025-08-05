@@ -15,6 +15,7 @@
 #include "../src/file.c"
 #include "../src/print.c"
 #include "../src/error.c"
+#include "../src/heading_caps.c"
 
 #include "../src/tokenise_internal.h"
 #include "../src/tokenise_metadata.c"
