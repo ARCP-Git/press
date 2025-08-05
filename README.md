@@ -1,46 +1,50 @@
 # Overview
 
-The purpose of the press tool is to allow the generation of professional documents with no technical knowledge besides the formatting specification presented in this document. Multiple output formats can be generated from the same input text file. The currently supported output formats are:
+The purpose of the press tool is to support the generation of professional documents with no technical knowledge, besides the formatting specification presented in this document. Documents of multiple formats can be generated from the same input text file. The currently supported output formats are:
 
-1. [HTML](https://en.wikipedia.org/wiki/HTML)/[CSS](https://en.wikipedia.org/wiki/CSS) webpage
-2. [ePub](https://en.wikipedia.org/wiki/EPUB) eBook
+1. [HTML](https://en.wikipedia.org/wiki/HTML) web page (.html)
+2. [ePub](https://en.wikipedia.org/wiki/EPUB) eBook (.epub)
+3. Microsoft Word documents (.docx)
 
-Printable formats such as the [Open Document Format](https://en.wikipedia.org/wiki/OpenDocument) (.odt) will be supported in the future. This format is supported by most word processors including LibreOffice, OpenOffice, and Microsoft Word.
+Word documents are supported by Microsoft Word, LibreOffice, OpenOffice, and can be imported into Google Docs. This format is also ideal for generating PDF documents and for printing.
 
 # Rationale
 
-The initial impetus for developing this application was the time consuming formatting of documents in traditional word processors, which also often ended up creating inconsistent results. The problem with [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) editors is that they mix the paradigms of semantic and visual design. Semantics refer to the context of an element such as a heading, paragraph, or blockquote. Using a visual editor means making something *look* like a blockquote, but the application has no way to know that. Word processors allow you to mark text semantically using styles, but they also allow you to easily circumvent them.
+The initial impetus for developing this application was the time-consuming formatting of documents in traditional word processors, which often end up creating inconsistent results. The problem with [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) editors is that they mix the paradigms of semantic and visual design. Semantics refer to the context of an element such as a heading, paragraph, or blockquote. Using a visual editor means making something *look* like a blockquote, but applications parsing the document have no way to recognise that. Word processors allow you to mark text semantically using styles, but they also allow you to easily circumvent them. Additionally, text files are smaller, easier to store within source control, and allow comparison of changes between versions.
 
-When creating a document in a single format this wouldn't be more than an inconvenience. We have recently, however, been generating multiple documents from the same text. We might want a webpage for the website, a printable PDF for sharing, a brochure for printing, and an eBook for reading on the go. We may also want to support printing in A4 or letter sizes depending on the location of readers. Making changes to the core text meant going back and updating all the other versions of the documents manually. Even worse than that, any style changes we make in the future would need to be applied retroactively to all the old documents.
+When creating a document in a single format, this wouldn't be more than an inconvenience. However, when multiple output formats are required, each one must be formatted separately. For example, one might require a web page for a website, a printable PDF for sharing, a brochure for printing, and an eBook for reading on the go. One might also need to support printing in A4 or letter sizes, depending on the location of readers. Making changes to the core text means going back and updating all the other versions of the documents manually. Even worse, any style changes made in the future would need to be applied retroactively to all the old documents.
 
-Instead, we have created a custom tool that parses all the text semantically, and adjusts the visual aspects to suit the generated document formats. Updating the visual style for all documents just requires running the tool again.
+Instead, this tool parses all the text semantically, and adjusts the visual aspects to suit the generated document formats. Updating the visual style for all documents simply requires running the tool again.
 
-This idea is similar to existing formats such as [LaTeX](https://en.wikipedia.org/wiki/LaTeX) and document generators using the [Markdown](https://en.wikipedia.org/wiki/Markdown) format. Why not use existing tools?
+This idea is similar to existing formats such as [LaTeX](https://en.wikipedia.org/wiki/LaTeX) and document generators using the [Markdown](https://en.wikipedia.org/wiki/Markdown) format.
 
-1. To ensure source text is readable in and of itself with as little metadata as possible.
-2. To avoid dependencies. This tool is written in standard and cross-platform C with zero dependencies on other projects or libraries. It's just a single .exe file that does not require any installation procedures.
-3. To keep the code small and simple. This allows us to easily add any features we need.
+Why not use existing tools?
+
+1. To ensure source text is readable in and of itself with as little metadata and markup as possible.
+2. To avoid dependencies. This tool is written in standard and cross-platform C, with zero dependencies on any other project or library. A single executable file is generated without any installation proecedure required.
+3. To keep the code small and simple. This allows for new features to be easily added.
 
 # Usage
 
 The following example shows how to use the tool to generate a webpage.
 `press --html "source-file.txt"`
 
-The order of arguments does not matter, but the source file path is mandatory. All other parameters are optional. Passing just the source file path will validate the file without generating any documents.
+The order of arguments does not matter, but the source file path is mandatory. All other parameters are optional. Passing only the source file path will validate the file without generating any documents.
 
 Parameters:
 
 * Source file path. If there are spaces in the path you should surround it in "double quote characters".
-* --all - Generates all formats.
-* --html - Generates an HTML webpage and CSS stylesheet.
-* --epub - Generates an ePub eBook.
-* --odt - Generate ODT word processor document (experimental).
+* --html - Generates HTML web page
+* --epub - Generates ePub2 eBook
+* --docx - Generates Microsoft Word document
+* --all - Generates all supported formats
+* --help - Explains how to use the software
 
 # Format
 
-The format is very similar to [Markdown](https://www.markdownguide.org/cheat-sheet/). Differences have been introduced to simplify the format by removing unnecessary features, making the raw text more readable, and adding specialised features tailored for books and articles.
+The format is very similar to [Markdown](https://www.markdownguide.org/cheat-sheet/). Differences have been introduced to simplify the format by removing unnecessary features, make the raw text more readable, and add specialised features tailored for professional documents and books.
 
-Ultimately the input format is a raw text file, with a strict layout that allows for reading with consistent formatting, and for making the semantics of the text clear to the press tool.
+Ultimately, the input format is a raw text file with a strict layout that allows for reading with consistent formatting, and for making the semantics of the text clear for parsing.
 
 The press tool does not combine multiple lines together. This means that each element is a single line. Paragraphs can become very long, so it is advised to turn on word-wrapping in your text editor. For example:
 
@@ -62,7 +66,7 @@ lines.
 
 ## Headings
 
-There are three levels of headings. In an article the top-level heading will be the title, while in a book it will be the chapter name. The other two headings should be used to subdivide the text.
+There are five levels of headings. In an article the top-level heading will be the title by default, while in a book it will be the chapter name. The other two headings should be used to subdivide the text.
 
 Heading are defined by using the hash '#' character at the start of a line surrounded by blank lines. Subsequent heading levels add extra hashes.
 
@@ -72,11 +76,15 @@ Heading are defined by using the hash '#' character at the start of a line surro
 ## Second Level
 
 ### Third level
+
+#### Fourth level
+
+##### Fifth level
 ```
 
 ## Paragraphs
 
-A paragraph is a line of text surrounded by blank lines. New lines followed by text will be treated as a line break within the same paragraph. Two blank lines between paragraphs create a paragraph break. When paragraphs are formatted without blank lines between them, paragraph breaks will force one.
+A paragraph is a line of text surrounded by blank lines. New lines followed by text will be treated as a line break within the same paragraph. Two blank lines between paragraphs create a paragraph break.
 
 ```
 This is a paragraph.
@@ -92,20 +100,29 @@ are separated by a paragraph break.
 
 ## Right-aligned Paragraphs
 
-Right-aligned paragraphs begin with the greater-than symbol followed by a space. Note that this syntax differs from Markdown where this would produce a block quote.
+Right-aligned paragraphs begin with two greater-than symbols ">>" followed by a space. Line breaks work the same as with normal paragraphs.
 
 ```
-> This text is
-> right aligned.
+>> This text is
+>> right aligned.
+```
+
+## Centred Paragraphs
+
+Centred paragraphs begin with a greater-than symbol and a less-than symbol "><" followed by a space. Line breaks work the same as with normal paragraphs.
+
+```
+>< This text is
+>< centred.
 ```
 
 ## Lists
 
-There are two types of lists, ordered and unordered. Both must be placed at the beginning of a line surrounded by black lines.
+There are two types of lists: ordered and unordered. Both must be placed at the beginning of a line surrounded by blank lines.
 
-Ordered lists can use arabic numbers, roman numerals, or letters. Each number or letter must be followed by a dot and exactly one space ". ".
+Ordered lists can use arabic numbers, roman numerals, or letters. Each number or letter must be followed by a dot and exactly one space ". ". Unordered lists are usually rendered using bullet points. They are defined using the asterisk '*' character.
 
-Unordered lists are usually rendered using bullet points. They are defined using the asterisk character.
+Sometimes it is necessary for a pragraph to begin with the same characters used by lists. To prevent the text from being interpreted as a list, the escape character '\\' may be used.
 
 ```
 1. Apple
@@ -123,33 +140,38 @@ c. Pear
 * Apple
 * Orange
 * Pear
+
+\1. This paragraph is not a list.
 ```
 
 ## Quotes
 
-Inline quotes are formatted using double quotation marks, and inner quotes are formatted using backticks (the key under the escape key on US and UK keyboards.
+Inline quotes are formatted using double quotation marks '"', and inner quotes are formatted using backticks '`' (the key under the escape key on US and UK keyboards. Quotes must normally begin and end on the same line. This can be overriden by using the escape sequences "\\<"" and "\\>"".
 
 ```
 "This is a quote"
 
 "This is a first-level quote, `and this is a second-level quote`."
+
+\<"This quote
+spans multiple lines.\>"
 ```
 
 ## Block Quotes
 
-A block quote is created by tabbing the paragraph or empty lines. They may optionally end with a citation created by a tab and em dash "---".
+A block quote is created by tabbing the paragraph. Subsequent paragraphs that are part of the same quote should be separated by blank tabbed lines. Block quotes may optionally end with a citation created by a tab and em dash "---".
 
 ```
     This is the first paragraph of the quote.
-
+    
     This is the second.
-
+    
     ---This is the citation
 ```
 
 ## Text Decoration
 
-Emphasised text is surrounded by a single asterisk "*" on each side. It is generally rendered as italicised text. Strong text is surrounded by two asterisks and is generally rendered as bold text.
+Emphasised text is surrounded by a single asterisk "*" on each side. It is usually rendered as italicised text. Strong text is surrounded by two asterisks and is usually rendered as bold text.
 
 ```
 *italicized text*
@@ -158,7 +180,7 @@ Emphasised text is surrounded by a single asterisk "*" on each side. It is gener
 
 ## Dashes
 
-Various dashes are used in publishing that are no available on the keyboard. The press markup uses mulitple hypens "-" to specify them.
+Various dashes are used in publishing that are not available on the keyboard. Multiple hyphens "-" are used to specify them.
 
 ```
 This is a hyphen "-".
@@ -166,23 +188,92 @@ This is an en dash "--".
 This is an em dash "---".
 ```
 
+## Fractions
+
+Stylised fractions such as '½' can be specified by separating two numbers with two slashes "//". In order to combine a number with a fraction, the underscore character '_' can be used.
+
+```
+One and a half as symbols: 1_1//2.
+```
+
+## Multi-line Quotes
+
+Quotes normally cannot contain line breaks, except within quote blocks. Escape sequences may be used to get around this restriction. Opening quotes use "\\<"" and closing quotes use "\\>"".
+
+```
+\<"Roses are red
+Violets are blue,
+Sugar is sweet
+And so are you.\>"
+```
+
+## Dinkus
+
+A dinkus separates logical sections within the same chapter. They can be specified using three asterisks '*' separated by spaces.
+
+```
+This is a paragraph.
+
+* * *
+
+This is a paragraph in a new section.
+```
+
+## Escape Sequences
+
+The backslash character '\\' is used to prevent special symbols or sequences from being interpreted as markup. Instead the symbol that follows will be interpreted as regular text.
+
+```
+1. This is a list.
+
+I. This is a list.
+
+a. This is a list.
+
+*. This is a list.
+
+{ title: This is metadata }
+
+[1] This is a note.
+
+This paragraph contains a note.[1]
+
+\1. This is a paragraph.
+
+\I. This is a paragraph.
+
+\a. This is a paragraph.
+
+\*. This is a paragraph
+
+\{ This is not metadata.
+
+\[ This is not a note.
+
+This year \[1917] is not a note.
+
+\<" This paragraph has an opening quote but not an ending quote.
+
+This paragraph has a closing quote but not an opening quote.\>"
+```
+
 ## Comments
 
-Comments allow text to be inserted in the source text file which is removed from generated documents. Example uses of comments are to temporarily remove text during editing, or to share comments between author and editor. There are two supported types of comments.
+Comments allow for text to be inserted in the source text file, but removed from generated documents. Example uses of comments are to temporarily remove text during editing or to share comments between author and editor. There are two supported types of comments.
 
-1. Pairs of "/*" and "*/" denote a multiline range comment. Range comments can be placed anywhere, but careless use can add extra spaces which can in turn affect the semantics of the text.
-2. "//" can only be used at the start of a line. It does not introduce a new line so has no effect on the text semantics.
+1. Pairs of "/\*" and "\*/" denote a multi-line ranged comment. Ranged comments can be placed anywhere, but careless use can add extra spaces, which can in turn affect the semantics of the text.
+2. "//" can only be used at the start of a line. It does not introduce a new line, so has no effect on the text semantics.
 
 ```
 // Commentting on following paragraph
 This paragraph has a comment above it.
 
-This paragraph has a /*range */comment. It will be printed as "This paragraph has a comment."
+This paragraph has a /*ranged */comment. It will be printed as "This paragraph has a comment."
 ```
 
 ## Notes
 
-Each note is defined in two places, both using square brackets containing the note reference number. The first is placed inline within the text and the other is placed at the end of the chapter, each separated by a blank line. Notes may contain multiple paragraphs, and are terminated when another note or chapter heading is encountered. Each chapter must reset the note number to 1. Generated documents may feature different note numbers depending on whether they are printed per page, chapter, or book.
+Each note is defined in two places, both using square brackets "[]" containing the note reference number. The first is placed inline within the text and the other is placed at the end of the chapter, each separated by a blank line. Notes may contain multiple paragraphs, tables, and are terminated when another note or chapter heading is encountered. Each chapter must reset the note number to 1. Generated documents may feature different note numbers depending on whether they are printed per page, chapter, or book.
 
 ```
 This paragraph has a note.[1]
@@ -192,9 +283,19 @@ This paragraph has a note.[1]
 Notes may contain multiple paragraphs separated by a blank line.
 ```
 
+## Tables
+
+Tables are specified using pipe characters '|' to separate cell columns, and lines to separate rows.
+
+```
+| **Bold Heading** | **Bold Heading** |
+| Cell             | Cell             |
+| Cell             | Cell             |
+```
+
 ## Metadata
 
-Metadata allows the author to provide more information to the press tool. Metadata attributes are placed with curly braces and must be placed at the start of a line. Available attributes are:
+Metadata allows the author to provide more information to the press tool. Metadata attributes use curly braces, and must be placed at the start of a line. Available attributes are:
 
 * Type - "Book" or "Article".
 * Title - Title of the article or book. Articles without this will default to the top-level heading. Articles and books can fall back to the source text file name.
@@ -202,10 +303,12 @@ Metadata allows the author to provide more information to the press tool. Metada
 * Authors - Each author must be separated by a comma and space ", ".
 * Translator - Translator of the article or book.
 * Translators - Each translator must be separated by a comma and space ", ".
+* Filename - Overrides filename instead of using the title. This is useful for long titles or when the title contains characters that are invalid in filenames. Note that Kindle currently ignores title metadata, so the filename will be used as the book title.
 
 ```
 {Type: Book}
 {Title: Manifesto of the Communist Party}
 {Authors: Karl Marx, Friedrich Engels}
 {Translator: Samuel Moore}
+{Filename: Communist Manifesto}
 ```
