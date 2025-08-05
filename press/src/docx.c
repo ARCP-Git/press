@@ -7,9 +7,10 @@ static void create_docx_content_types(void)
 		"<Types xmlns=\"http://schemas.openxmlformats.org/package/2006/content-types\">\n"
 		"\t<Default Extension=\"rels\" ContentType=\"application/vnd.openxmlformats-package.relationships+xml\"/>\n"
 		"\t<Default Extension=\"xml\" ContentType=\"application/xml\"/>\n"
+		"\t<Override PartName=\"/word/styles.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml\"/>\n"
+		"\t<Override PartName=\"/word/settings.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml\"/>\n"
 		"\t<Override PartName=\"/word/document.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml\"/>\n"
 		"\t<Override PartName=\"/word/numbering.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml\"/>\n"
-		"\t<Override PartName=\"/word/styles.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml\"/>\n"
 		"</Types>"
 	);
 
@@ -38,8 +39,23 @@ static void create_docx_doc_rels(void)
 		"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
 		"<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">\n"
 		"\t<Relationship Id=\"rId2\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles\" Target=\"styles.xml\"/>\n"
+		"\t<Relationship Id=\"rId3\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings\" Target=\"settings.xml\"/>\n"
 		"\t<Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering\" Target=\"numbering.xml\"/>\n"
 		"</Relationships>"
+	);
+
+	close_file(f);
+}
+
+static void create_docx_settings(void)
+{
+	file f = open_file(OUTPUT_DIR "/docx/word/settings.xml", file_mode_write);
+
+	print_str(f,
+		"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+		"<w:settings xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\">\n"
+		"\t<w:autoHyphenation/>\n"
+		"</w:settings>\n"
 	);
 
 	close_file(f);
@@ -51,6 +67,7 @@ static void create_docx_styles(void)
 
 	print_str(f,
 		"<w:styles xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\">\n"
+
 		"\t<w:style w:type=\"paragraph\" w:default=\"1\" w:styleId=\"Normal\">\n"
 		"\t\t<w:name w:val=\"Normal\"/>\n"
 		"\t\t<w:qFormat/>\n"
@@ -63,6 +80,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:lang w:val=\"en-CA\"/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"paragraph\" w:styleId=\"Title\">\n"
 		"\t\t<w:name w:val=\"Title\"/>\n"
 		"\t\t<w:next w:val=\"Normal\"/>\n"
@@ -78,6 +96,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:sz w:val=\"56\"/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"paragraph\" w:styleId=\"Subtitle\">\n"
 		"\t\t<w:name w:val=\"Subtitle\"/>\n"
 		"\t\t<w:basedOn w:val=\"Title\"/>\n"
@@ -94,6 +113,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:sz w:val=\"44\"/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"paragraph\" w:styleId=\"Heading1\">\n"
 		"\t\t<w:name w:val=\"heading 1\"/>\n"
 		"\t\t<w:next w:val=\"Normal\"/>\n"
@@ -103,6 +123,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:keepNext/>\n"
 		"\t\t\t<w:keepLines/>\n"
 		"\t\t\t<w:spacing w:before=\"240\" w:after=\"240\"/>\n"
+		"\t\t\t<w:jc w:val=\"center\"/>\n"
 		"\t\t\t<w:outlineLvl w:val=\"0\"/>\n"
 		"\t\t</w:pPr>\n"
 		"\t\t<w:rPr>\n"
@@ -110,6 +131,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:sz w:val=\"40\"/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"paragraph\" w:styleId=\"Heading2\">\n"
 		"\t\t<w:name w:val=\"heading 2\"/>\n"
 		"\t\t<w:next w:val=\"Normal\"/>\n"
@@ -126,6 +148,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:sz w:val=\"32\"/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"paragraph\" w:styleId=\"Heading3\">\n"
 		"\t\t<w:name w:val=\"heading 3\"/>\n"
 		"\t\t<w:next w:val=\"Normal\"/>\n"
@@ -133,6 +156,7 @@ static void create_docx_styles(void)
 		"\t\t<w:pPr>\n"
 		"\t\t\t<w:keepNext/>\n"
 		"\t\t\t<w:keepLines/>\n"
+		"\t\t\t<w:spacing w:before=\"240\"/>\n"
 		"\t\t\t<w:outlineLvl w:val=\"2\"/>\n"
 		"\t\t</w:pPr>\n"
 		"\t\t<w:rPr>\n"
@@ -140,6 +164,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:sz w:val=\"28\"/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"paragraph\" w:styleId=\"Heading4\">\n"
 		"\t\t<w:name w:val=\"heading 4\"/>\n"
 		"\t\t<w:next w:val=\"Normal\"/>\n"
@@ -156,6 +181,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:i/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"paragraph\" w:styleId=\"Heading5\">\n"
 		"\t\t<w:name w:val=\"heading 5\"/>\n"
 		"\t\t<w:basedOn w:val=\"Normal\"/>\n"
@@ -172,6 +198,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:rFonts w:ascii=\"Georgia\" w:hAnsi=\"Georgia\"/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"paragraph\" w:styleId=\"ListParagraph\">\n"
 		"\t\t<w:name w:val=\"List Paragraph\"/>\n"
 		"\t\t<w:basedOn w:val=\"Normal\"/>\n"
@@ -180,10 +207,74 @@ static void create_docx_styles(void)
 		"\t\t\t<w:numPr>\n"
 		"\t\t\t\t<w:numId w:val=\"1\"/>\n"
 		"\t\t\t</w:numPr>\n"
+		"\t\t\t<w:spacing w:before=\"240\"/>\n"
 		"\t\t\t<w:ind w:left=\"357\" w:hanging=\"357\"/>\n"
 		"\t\t\t<w:contextualSpacing/>\n"
 		"\t\t</w:pPr>\n"
 		"\t</w:style>\n"
+
+		"\t<w:style w:type=\"paragraph\" w:customStyle=\"1\" w:styleId=\"FirstParagraph\">\n"
+		"\t\t<w:name w:val=\"First Paragraph\"/>\n"
+		"\t\t<w:basedOn w:val=\"Normal\"/>\n"
+		"\t\t<w:next w:val=\"FirstParagraph\"/>\n"
+		"\t\t<w:link w:val=\"FirstParagraphChar\"/>\n"
+		"\t\t<w:qFormat/>\n"
+		"\t\t<w:pPr>\n"
+		"\t\t\t<w:spacing w:before=\"240\" w:after=\"0\"/>\n"
+		"\t\t</w:pPr>\n"
+		"\t</w:style>\n"
+
+		"\t<w:style w:type=\"character\" w:customStyle=\"1\" w:styleId=\"FirstParagraphChar\">\n"
+		"\t\t<w:name w:val=\"First Paragraph Char\"/>\n"
+		"\t\t<w:basedOn w:val=\"DefaultParagraphFont\"/>\n"
+		"\t\t<w:link w:val=\"FirstParagraph\"/>\n"
+		"\t\t<w:rPr>\n"
+		"\t\t\t<w:rFonts w:ascii=\"Georgia\" w:hAnsi=\"Georgia\"/>\n"
+		"\t\t\t<w:lang w:val=\"en-CA\"/>\n"
+		"\t\t</w:rPr>\n"
+		"\t</w:style>\n"
+
+		"\t<w:style w:type=\"paragraph\" w:customStyle=\"1\" w:styleId=\"IndentParagraph\">\n"
+		"\t\t<w:name w:val=\"Indent Paragraph\"/>\n"
+		"\t\t<w:basedOn w:val=\"Normal\"/>\n"
+		"\t\t<w:link w:val=\"IndentParagraphChar\"/>\n"
+		"\t\t<w:qFormat/>\n"
+		"\t\t<w:pPr>\n"
+		"\t\t\t<w:spacing w:after=\"0\"/>\n"
+		"\t\t\t<w:ind w:firstLine=\"567\"/>\n"
+		"\t\t</w:pPr>\n"
+		"\t</w:style>\n"
+
+		"\t<w:style w:type=\"character\" w:customStyle=\"1\" w:styleId=\"IndentParagraphChar\">\n"
+		"\t\t<w:name w:val=\"Indent Paragraph Char\"/>\n"
+		"\t\t<w:basedOn w:val=\"DefaultParagraphFont\"/>\n"
+		"\t\t<w:link w:val=\"IndentParagraph\"/>\n"
+		"\t\t<w:rPr>\n"
+		"\t\t\t<w:rFonts w:ascii=\"Georgia\" w:hAnsi=\"Georgia\"/>\n"
+		"\t\t\t<w:lang w:val=\"en-CA\"/>\n"
+		"\t\t</w:rPr>\n"
+		"\t</w:style>\n"
+
+		"\t<w:style w:type=\"paragraph\" w:customStyle=\"1\" w:styleId=\"FirstBlockquoteParagraph\">\n"
+		"\t\t<w:name w:val=\"First Blockquote Paragraph\"/>\n"
+		"\t\t<w:basedOn w:val=\"Normal\"/>\n"
+		"\t\t<w:qFormat/>\n"
+		"\t\t<w:pPr>\n"
+		"\t\t\t<w:spacing w:before=\"240\" w:after=\"0\"/>\n"
+		"\t\t\t<w:ind w:left=\"567\" w:right=\"567\"/>\n"
+		"\t\t</w:pPr>\n"
+		"\t</w:style>\n"
+
+		"\t<w:style w:type=\"paragraph\" w:customStyle=\"1\" w:styleId=\"IndentBlockquoteParagraph\">\n"
+		"\t\t<w:name w:val=\"Indent Blockquote Paragraph\"/>\n"
+		"\t\t<w:basedOn w:val=\"Normal\"/>\n"
+		"\t\t<w:qFormat/>\n"
+		"\t\t<w:pPr>\n"
+		"\t\t\t<w:spacing w:after=\"0\"/>\n"
+		"\t\t\t<w:ind w:left=\"567\" w:right=\"567\" w:firstLine=\"567\"/>\n"
+		"\t\t</w:pPr>\n"
+		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"paragraph\" w:customStyle=\"1\" w:styleId=\"BlockQuote\">\n"
 		"\t\t<w:name w:val=\"Block Quote\"/>\n"
 		"\t\t<w:basedOn w:val=\"Normal\"/>\n"
@@ -197,6 +288,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:rFonts w:ascii=\"Georgia\" w:hAnsi=\"Georgia\"/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"paragraph\" w:customStyle=\"1\" w:styleId=\"QuoteBlockCitation\">\n"
 		"\t\t<w:name w:val=\"Quote Block Citation\"/>\n"
 		"\t\t<w:qFormat/>\n"
@@ -209,6 +301,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:rFonts w:ascii=\"Georgia\" w:hAnsi=\"Georgia\"/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"character\" w:default=\"1\" w:styleId=\"DefaultParagraphFont\">\n"
 		"\t\t<w:name w:val=\"Default Paragraph Font\"/>\n"
 		"\t</w:style>\n"
@@ -221,6 +314,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:sz w:val=\"40\"/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"character\" w:customStyle=\"1\" w:styleId=\"Heading2Char\">\n"
 		"\t\t<w:name w:val=\"Heading 2 Char\"/>\n"
 		"\t\t<w:basedOn w:val=\"DefaultParagraphFont\"/>\n"
@@ -230,6 +324,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:sz w:val=\"32\"/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"character\" w:customStyle=\"1\" w:styleId=\"Heading3Char\">\n"
 		"\t\t<w:name w:val=\"Heading 3 Char\"/>\n"
 		"\t\t<w:basedOn w:val=\"DefaultParagraphFont\"/>\n"
@@ -239,6 +334,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:sz w:val=\"28\"/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"character\" w:customStyle=\"1\" w:styleId=\"Heading4Char\">\n"
 		"\t\t<w:name w:val=\"Heading 4 Char\"/>\n"
 		"\t\t<w:basedOn w:val=\"DefaultParagraphFont\"/>\n"
@@ -248,6 +344,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:i/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"character\" w:customStyle=\"1\" w:styleId=\"Heading5Char\">\n"
 		"\t\t<w:name w:val=\"Heading 5 Char\"/>\n"
 		"\t\t<w:basedOn w:val=\"DefaultParagraphFont\"/>\n"
@@ -257,6 +354,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:i/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"character\" w:customStyle=\"1\" w:styleId=\"TitleChar\">\n"
 		"\t\t<w:name w:val=\"Title Char\"/>\n"
 		"\t\t<w:basedOn w:val=\"DefaultParagraphFont\"/>\n"
@@ -267,6 +365,7 @@ static void create_docx_styles(void)
 		"\t\t\t<w:sz w:val=\"56\"/>\n"
 		"\t\t</w:rPr>\n"
 		"\t</w:style>\n"
+
 		"\t<w:style w:type=\"character\" w:customStyle=\"1\" w:styleId=\"SubtitleChar\">\n"
 		"\t\t<w:name w:val=\"Subtitle Char\"/>\n"
 		"\t\t<w:basedOn w:val=\"DefaultParagraphFont\"/>\n"
@@ -345,9 +444,17 @@ static void end_docx_text_run(file f, docx_run_type type)
 	}
 }
 
-static void print_docx_text_block(file f, const char* text)
+static void print_docx_text_block(file f, const char* text, bool citation)
 {
 	docx_run_type type = docx_run_type_none;
+
+	if (citation)
+	{
+		begin_docx_text_run(f, type, docx_run_type_normal, "");
+		type = docx_run_type_normal;
+
+		print_char_token(f, text_token_type_em_dash);
+	}
 
 	while (*text)
 	{
@@ -403,6 +510,7 @@ static void create_docx_document(const document* doc)
 	);
 
 	int depth = 2;
+	int paragraph_count = 0;
 	bool inside_block_quote = false;
 
 	for (uint32_t chapter_index = 0; chapter_index < doc->chapter_count; ++chapter_index)
@@ -416,44 +524,74 @@ static void create_docx_document(const document* doc)
 			switch (element->type)
 			{
 			case document_element_type_heading_1:
+				paragraph_count = 0;
 				print_str(f,
 					"\t\t<w:p>\n"
 					"\t\t\t<w:pPr><w:pStyle w:val=\"Heading1\"/></w:pPr>\n"
 				);
-				print_docx_text_block(f, element->text);
+				print_docx_text_block(f, element->text, false);
 				print_str(f, "\t\t</w:p>\n");
 				break;
 			case document_element_type_heading_2:
+				paragraph_count = 0;
 				print_str(f,
 					"\t\t<w:p>\n"
 					"\t\t\t<w:pPr><w:pStyle w:val=\"Heading2\"/></w:pPr>\n"
 				);
-				print_docx_text_block(f, element->text);
+				print_docx_text_block(f, element->text, false);
 				print_str(f, "\t\t</w:p>\n");
 				break;
 			case document_element_type_heading_3:
+				paragraph_count = 0;
 				print_str(f,
 					"\t\t<w:p>\n"
 					"\t\t\t<w:pPr><w:pStyle w:val=\"Heading3\"/></w:pPr>\n"
 				);
-				print_docx_text_block(f, element->text);
+				print_docx_text_block(f, element->text, false);
 				print_str(f, "\t\t</w:p>\n");
 				break;
 			case document_element_type_text_block:
-				print_docx_text_block(f, element->text);
+				print_docx_text_block(f, element->text, false);
 				break;
 			case document_element_type_paragraph_begin:
+				++paragraph_count;
+
 				print_str(f, "\t\t<w:p>\n");
+
+				if (paragraph_count == 1)
+				{
+					if (inside_block_quote)
+						print_str(f, "\t\t\t<w:pPr><w:pStyle w:val=\"FirstBlockquoteParagraph\"/></w:pPr>\n");
+					else
+						print_str(f, "\t\t\t<w:pPr><w:pStyle w:val=\"FirstParagraph\"/></w:pPr>\n");
+				}
+				else
+				{
+					if (inside_block_quote)
+						print_str(f, "\t\t\t<w:pPr><w:pStyle w:val=\"IndentBlockquoteParagraph\"/></w:pPr>\n");
+					else
+						print_str(f, "\t\t\t<w:pPr><w:pStyle w:val=\"IndentParagraph\"/></w:pPr>\n");
+				}
+				break;
+			case document_element_type_paragraph_break_begin:
+				paragraph_count = 1;
+
+				print_str(f, "\t\t<w:p>\n");
+
 				if (inside_block_quote)
-					print_str(f, "\t\t\t<w:pPr><w:pStyle w:val=\"BlockQuote\"/></w:pPr>\n");
+					print_str(f, "\t\t\t<w:pPr><w:pStyle w:val=\"FirstBlockquoteParagraph\"/></w:pPr>\n");
+				else
+					print_str(f, "\t\t\t<w:pPr><w:pStyle w:val=\"FirstParagraph\"/></w:pPr>\n");
 				break;
 			case document_element_type_paragraph_end:
 				print_str(f, "\t\t</w:p>\n");
 				break;
 			case document_element_type_blockquote_begin:
+				paragraph_count = 0;
 				inside_block_quote = true;
 				break;
 			case document_element_type_blockquote_end:
+				paragraph_count = 0;
 				inside_block_quote = false;
 				break;
 			case document_element_type_blockquote_citation:
@@ -461,10 +599,11 @@ static void create_docx_document(const document* doc)
 					"\t\t<w:p>\n"
 					"\t\t\t<w:pPr><w:pStyle w:val=\"QuoteBlockCitation\"/></w:pPr>\n"
 				);
-				print_docx_text_block(f, element->text);
+				print_docx_text_block(f, element->text, true);
 				print_str(f, "\t\t</w:p>\n");
 				break;
 			case document_element_type_ordered_list_begin_arabic:
+				paragraph_count = 0;
 				break;
 			case document_element_type_ordered_list_end:
 				break;
@@ -473,7 +612,7 @@ static void create_docx_document(const document* doc)
 					"\t\t<w:p>\n"
 					"\t\t\t<w:pPr><w:pStyle w:val=\"ListParagraph\"/></w:pPr>\n"
 				);
-				print_docx_text_block(f, element->text);
+				print_docx_text_block(f, element->text, false);
 				print_str(f, "\t\t</w:p>\n");
 				break;
 			}
@@ -504,6 +643,7 @@ static void generate_docx(const document* doc)
 	create_docx_content_types();
 	create_docx_rels();
 	create_docx_doc_rels();
+	create_docx_settings();
 	create_docx_styles();
 	create_docx_numbering();
 	create_docx_document(doc);
@@ -514,6 +654,7 @@ static void generate_docx(const document* doc)
 		OUTPUT_DIR "/docx/_rels/.rels",
 		OUTPUT_DIR "/docx/word/_rels/document.xml.rels",
 		OUTPUT_DIR "/docx/word/styles.xml",
+		OUTPUT_DIR "/docx/word/settings.xml",
 		OUTPUT_DIR "/docx/word/numbering.xml",
 		OUTPUT_DIR "/docx/word/document.xml"
 	};
@@ -524,6 +665,7 @@ static void generate_docx(const document* doc)
 		"_rels/.rels",
 		"word/_rels/document.xml.rels",
 		"word/styles.xml",
+		"word/settings.xml",
 		"word/numbering.xml",
 		"word/document.xml"
 	};
