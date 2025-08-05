@@ -42,12 +42,12 @@ const int64_t heading_caps_blacklist_count = sizeof(heading_caps_blacklist) / si
 static char heading_word[4];
 static bool heading_restart;
 
-static void check_heading_word(const char* heading)
+static void check_heading_word(line_token* token)
 {
 	for (int64_t i = 0; i < heading_caps_blacklist_count; ++i)
 	{
 		if (strcmp(heading_word, heading_caps_blacklist[i]) == 0)
-			handle_error("Heading contains capitalised word that should be lowercase: \"%s\", in heading: \"%s\".", heading_word, heading);
+			handle_error("Heading on line %d contains capitalised word that should be lowercase: \"%s\", in heading: \"%s\".", token->line, heading_word, token->text);
 	}
 }
 
@@ -105,9 +105,9 @@ static int get_next_heading_word(const char* str)
 	return 4;
 }
 
-void check_heading_caps(const char* heading)
+void check_heading_caps(line_token* token)
 {
-	const char* str = heading;
+	const char* str = token->text;
 
 	str = skip_initial_chars_in_header(str);
 	heading_restart = false;
@@ -125,7 +125,7 @@ void check_heading_caps(const char* heading)
 		}
 		else if (len && len < 4)
 		{
-			check_heading_word(heading);
+			check_heading_word(token);
 			str += len;
 		}
 		else

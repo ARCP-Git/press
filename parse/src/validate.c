@@ -10,7 +10,7 @@ typedef struct
 	uint32_t	note_element_count;
 } validate_context;
 
-void check_heading_caps(const char* heading);
+void check_heading_caps(line_token* token);
 
 static void handle_validate_error(validate_context* ctx, const char* format, ...)
 {
@@ -74,7 +74,7 @@ static line_token* validate_heading(validate_context* ctx, line_token* token)
 	assert(level >= 0);
 	assert(level <= 5);
 
-	check_heading_caps(token->text);
+	check_heading_caps(token);
 
 	++ctx->element_count;
 
