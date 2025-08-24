@@ -56,6 +56,13 @@ typedef enum
 
 typedef enum
 {
+	document_align_left,
+	document_align_right,
+	document_align_centre
+} document_align;
+
+typedef enum
+{
 	document_type_none,
 	document_type_book,
 	document_type_article
@@ -83,8 +90,9 @@ typedef struct
 
 typedef struct
 {
-	uint32_t	column_span;
-	const char*	text_element;
+	document_align	alignment;
+	uint32_t		column_span;
+	const char*		text_element;
 } document_cell;
 
 typedef struct

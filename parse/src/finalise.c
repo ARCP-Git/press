@@ -156,7 +156,7 @@ static line_token* finalise_table(finalise_context* ctx, line_token* token)
 			header_row_count = row_count;
 
 			token = finalise_peek_next_token(ctx, &peek);
-			while (token->type == line_token_type_table_header_delimiter_cell)
+			while (token->type != line_token_type_table_row)
 				token = finalise_peek_next_token(ctx, &peek);
 		}
 	}
@@ -179,6 +179,7 @@ static line_token* finalise_table(finalise_context* ctx, line_token* token)
 			{
 				i += span_count;
 				span_count = 1;
+				element->table->cells[i].alignment = document_align_left;
 				element->table->cells[i].column_span = 1;
 
 				if (token->length)
@@ -196,10 +197,24 @@ static line_token* finalise_table(finalise_context* ctx, line_token* token)
 		token = finalise_get_next_token(ctx);
 		if (token->type == line_token_type_table_header_delimiter_row)
 		{
-			token = finalise_get_next_token(ctx);
-			while (token->type == line_token_type_table_header_delimiter_cell)
+			for (uint32_t i = 0; i < column_count; ++i)
+			{
 				token = finalise_get_next_token(ctx);
+				if (token->type == line_token_type_table_header_align_right)
+					element->table->cells[i].alignment = document_align_right;
+				else if (token->type == line_token_type_table_header_align_centre)
+					element->table->cells[i].alignment = document_align_centre;
+			}
+
+			token = finalise_get_next_token(ctx);
 		}
+	}
+
+	i = 0;
+	for (uint32_t y = 0; y < row_count; ++y)
+	{
+		for (uint32_t x = 0; x < column_count; ++x)
+			element->table->cells[i++].alignment = element->table->cells[x].alignment;
 	}
 
 	return token;

@@ -960,28 +960,64 @@ static char tokenise_comment(tokenise_context* ctx, char c)
 static char tokenise_table_row(tokenise_context* ctx, char c)
 {
 	c = get_char(ctx);
-	if (c == '-')
+	if (c == '-' || c == '>')
 	{
 		add_line_token(ctx, line_token_type_table_header_delimiter_row);
 
 		for (;;)
 		{
-			if (c != '-')
-				handle_tokenise_error(ctx, "Table header delimiters may only contain hyphen '-' characters surrounded by table cell characters '|'.");
-
-			// Consume hyphens
-			do
+			if (c == '>')
 			{
-				c = get_char(ctx);
-			} while (c == '-');
+				// Consume hyphens
+				do
+				{
+					c = get_char(ctx);
+				} while (c == '-');
 
-			add_line_token(ctx, line_token_type_table_header_delimiter_cell);
+				if (c == '<')
+				{
+					add_line_token(ctx, line_token_type_table_header_align_centre);
 
-			if (c == '|')
-				c = get_char(ctx);
+					c = get_char(ctx);
+					if (c != '|')
+						handle_tokenise_error(ctx, "Table header delimiters may only contain hyphen '-' characters surrounded by table cell characters '|', optionally starting with '>' for right-alignment and ending with '<' for centred alignment.");
 
-			if (c == '\n')
-				return get_char(ctx);
+					c = get_char(ctx);
+				}
+				else if (c == '|')
+				{
+					add_line_token(ctx, line_token_type_table_header_align_right);
+					c = get_char(ctx);
+				}
+				else
+				{
+					handle_tokenise_error(ctx, "Table header delimiters may only contain hyphen '-' characters surrounded by table cell characters '|', optionally starting with '>' for right-alignment and ending with '<' for centred alignment.");
+				}
+
+				if (c == '\n')
+					return get_char(ctx);
+			}
+			else
+			{
+				// Consume hyphens
+				do
+				{
+					c = get_char(ctx);
+				} while (c == '-');
+
+				if (c == '|')
+				{
+					add_line_token(ctx, line_token_type_table_header_align_left);
+					c = get_char(ctx);
+				}
+				else
+				{
+					handle_tokenise_error(ctx, "Table header delimiters may only contain hyphen '-' characters surrounded by table cell characters '|', optionally starting with '>' for right-alignment and ending with '<' for centred alignment.");
+				}
+
+				if (c == '\n')
+					return get_char(ctx);
+			}
 		}
 	}
 	else

@@ -238,9 +238,23 @@ static void generate_html(const document* doc)
 					{
 						const document_cell* cell = &element->table->cells[i];
 						const uint32_t span = cell->column_span;
+						const document_align alignment = cell->alignment;
 
 						print_tabs(f, depth + 2);
-						print_fmt(f, "<t%c colspan=\"%d\">", y < header_row_count ? 'h' : 'd', span);
+
+						if (y < header_row_count)
+						{
+							print_fmt(f, "<th colspan=\"%d\">", span);
+						}
+						else
+						{
+							if (alignment == document_align_left)
+								print_fmt(f, "<td colspan=\"%d\" align=\"left\">", span);
+							else if (alignment == document_align_right)
+								print_fmt(f, "<td colspan=\"%d\" align=\"right\">", span);
+							else
+								print_fmt(f, "<td colspan=\"%d\" align=\"center\">", span);
+						}
 						//print_str(f, "<td>");
 
 						//const char* text = element->table->text_elements[i++];

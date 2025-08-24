@@ -140,7 +140,7 @@ static line_token* validate_table(validate_context* ctx, uint32_t* element_count
 			uint32_t column_count = 0;
 
 			token = validate_get_next_token(ctx);
-			while (token->type == line_token_type_table_header_delimiter_cell)
+			while (token->type != line_token_type_table_row)
 			{
 				++column_count;
 				token = validate_get_next_token(ctx);

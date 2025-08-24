@@ -27,7 +27,9 @@ typedef enum
 	line_token_type_table_cell,
 	line_token_type_table_merge,
 	line_token_type_table_header_delimiter_row,
-	line_token_type_table_header_delimiter_cell
+	line_token_type_table_header_align_left,
+	line_token_type_table_header_align_right,
+	line_token_type_table_header_align_centre
 } line_token_type;
 
 typedef struct
