@@ -364,7 +364,8 @@ static void create_epub_chapter(const document* doc, uint32_t index)
 					{
 						print_tabs(f, depth + 2);
 						print_str(f, "<td>");
-						print_html_text_block(&ctx, element->table->text_elements[i++]);
+						// TODO
+						//print_html_text_block(&ctx, element->table->text_elements[i++]);
 						print_str(f, "</td>");
 					}
 

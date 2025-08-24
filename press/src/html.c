@@ -232,12 +232,20 @@ static void generate_html(const document* doc)
 					print_tabs(f, depth + 1);
 					print_str(f, "<tr>");
 
-					for (uint32_t x = 0; x < element->table->width; ++x)
+					for (uint32_t x = 0; x < element->table->width;)
 					{
-						print_tabs(f, depth + 2);
-						print_str(f, "<td>");
+						const document_cell* cell = &element->table->cells[i];
+						const uint32_t span = cell->column_span;
 
-						const char* text = element->table->text_elements[i++];
+						print_tabs(f, depth + 2);
+						print_fmt(f, "<td colspan=\"%d\">", span);
+						//print_str(f, "<td>");
+
+						//const char* text = element->table->text_elements[i++];
+						const char* text = cell->text_element;
+						i += span;
+						x += span;
+
 						if (text)
 							print_html_text_block(&ctx, text);
 						print_str(f, "</td>");
@@ -392,10 +400,17 @@ static void generate_html(const document* doc)
 
 								for (uint32_t x = 0; x < element->table->width; ++x)
 								{
-									print_tabs(f, depth + 2);
-									print_str(f, "<td>");
+									const document_cell* cell = &element->table->cells[i];
+									const uint32_t span = cell->column_span;
 
-									const char* text = element->table->text_elements[i++];
+									print_tabs(f, depth + 2);
+									print_fmt(f, "<td colspan=\"%d\">", span);
+									//print_str(f, "<td>");
+
+									//const char* text = element->table->text_elements[i++];
+									const char* text = cell->text_element;
+									i += span;
+
 									if (text)
 										print_html_text_block(&ctx, text);
 									print_str(f, "</td>");

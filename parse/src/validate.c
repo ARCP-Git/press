@@ -100,16 +100,26 @@ static line_token* validate_table(validate_context* ctx, uint32_t* element_count
 
 	// Count number of columns for later comparison
 	uint32_t first_column_count = 0;
-	while ((token = validate_get_next_token(ctx))->type == line_token_type_table_cell)
+
+	token = validate_get_next_token(ctx);
+	while (token->type == line_token_type_table_cell || token->type == line_token_type_table_merge)
+	{
 		++first_column_count;
+		token = validate_get_next_token(ctx);
+	}
 
 	for (;;)
 	{
 		if (token->type == line_token_type_table_row)
 		{
 			uint32_t column_count = 0;
-			while ((token = validate_get_next_token(ctx))->type == line_token_type_table_cell)
+
+			token = validate_get_next_token(ctx);
+			while (token->type == line_token_type_table_cell || token->type == line_token_type_table_merge)
+			{
 				++column_count;
+				token = validate_get_next_token(ctx);
+			}
 
 			if (column_count != first_column_count)
 			{

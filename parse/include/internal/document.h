@@ -83,9 +83,15 @@ typedef struct
 
 typedef struct
 {
+	uint32_t	column_span;
+	const char*	text_element;
+} document_cell;
+
+typedef struct
+{
 	uint32_t		width;
 	uint32_t		height;
-	const char*		text_elements[];
+	document_cell	cells[];
 } document_table;
 
 typedef struct

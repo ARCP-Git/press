@@ -974,9 +974,19 @@ static char tokenise_table_row(tokenise_context* ctx, char c)
 		add_line_token(ctx, line_token_type_table_cell);
 
 		if (c == '|')
+		{
 			c = get_char(ctx);
+		}
 		else
+		{
 			c = tokenise_text(ctx, c, true);
+
+			while (c == '|')
+			{
+				add_line_token(ctx, line_token_type_table_merge);
+				c = get_char(ctx);
+			}
+		}
 
 		if (c == '\n')
 			return get_char(ctx);
