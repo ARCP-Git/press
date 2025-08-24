@@ -108,6 +108,8 @@ static line_token* validate_table(validate_context* ctx, uint32_t* element_count
 		token = validate_get_next_token(ctx);
 	}
 
+	bool encountered_delimiter = false;
+
 	for (;;)
 	{
 		if (token->type == line_token_type_table_row)
@@ -116,6 +118,29 @@ static line_token* validate_table(validate_context* ctx, uint32_t* element_count
 
 			token = validate_get_next_token(ctx);
 			while (token->type == line_token_type_table_cell || token->type == line_token_type_table_merge)
+			{
+				++column_count;
+				token = validate_get_next_token(ctx);
+			}
+
+			if (column_count != first_column_count)
+			{
+				ctx->line = line;
+				handle_validate_error(ctx, "All table rows must contain the same number of columns.");
+			}
+		}
+		else if (token->type == line_token_type_table_header_delimiter_row)
+		{
+			if (encountered_delimiter)
+			{
+				ctx->line = line;
+				handle_validate_error(ctx, "Tables may only contain a single header.");
+			}
+
+			uint32_t column_count = 0;
+
+			token = validate_get_next_token(ctx);
+			while (token->type == line_token_type_table_header_delimiter_cell)
 			{
 				++column_count;
 				token = validate_get_next_token(ctx);
@@ -154,6 +179,9 @@ static line_token* validate_note(validate_context* ctx, line_token* token)
 		{
 		case line_token_type_table_row:
 			token = validate_table(ctx, &ctx->note_element_count);
+			break;
+		case line_token_type_table_header_delimiter_row:
+			handle_validate_error(ctx, "Tables may not begin with table header delimiters.");
 			break;
 		case line_token_type_dinkus:
 			handle_validate_error(ctx, "Notes may not contain dinkuses \"* * *\".");
@@ -427,6 +455,9 @@ static void validate(line_tokens* tokens, doc_mem_req* out_mem_req)
 			break;
 		case line_token_type_unordered_list:
 			token = validate_unordered_list(&ctx, token);
+			break;
+		case line_token_type_table_header_delimiter_row:
+			handle_validate_error(&ctx, "Tables may not begin with table header delimiters.");
 			break;
 		case line_token_type_table_row:
 			token = validate_table(&ctx, &ctx.element_count);

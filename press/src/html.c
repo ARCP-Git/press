@@ -226,7 +226,9 @@ static void generate_html(const document* doc)
 				print_tabs(f, depth);
 				print_str(f, "<table>");
 
+				const uint32_t header_row_count = element->table->header_row_count;
 				uint32_t i = 0;
+
 				for (uint32_t y = 0; y < element->table->height; ++y)
 				{
 					print_tabs(f, depth + 1);
@@ -238,7 +240,7 @@ static void generate_html(const document* doc)
 						const uint32_t span = cell->column_span;
 
 						print_tabs(f, depth + 2);
-						print_fmt(f, "<td colspan=\"%d\">", span);
+						print_fmt(f, "<t%c colspan=\"%d\">", y < header_row_count ? 'h' : 'd', span);
 						//print_str(f, "<td>");
 
 						//const char* text = element->table->text_elements[i++];
@@ -248,7 +250,11 @@ static void generate_html(const document* doc)
 
 						if (text)
 							print_html_text_block(&ctx, text);
-						print_str(f, "</td>");
+
+						if (y < header_row_count)
+							print_str(f, "</th>");
+						else
+							print_str(f, "</td>");
 					}
 
 					print_tabs(f, depth + 1);

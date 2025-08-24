@@ -225,8 +225,9 @@ static void output_css(html_context* ctx)
 
 		// Tables
 		"table {\n"
+		"	border: 1px solid white;\n"
 		"	border-collapse: collapse;\n"
-		"	padding: 0;\n"
+		//"	padding: 0;\n"
 		"	margin-top: 1em;\n"
 		"	margin-bottom: 1em;\n"
 		"	margin-left: auto;\n"
@@ -234,15 +235,22 @@ static void output_css(html_context* ctx)
 		"}\n\n"
 
 		"th, td {\n"
+		"	border: 1px solid white;\n"
 		"	font-size: 0.75em;\n"
-		"	padding-left: 1em;\n"
+		"	padding: 0.25em;\n"
+		//"	padding-left: 1em;\n"
 		"	vertical-align: top;\n"
 		"}\n\n"
 
-		// Each cell is padded on the left except the first one on each row
-		"tr td:first-child {\n"
-		"	padding-left: 0;\n"
+		"th:empty {\n"
+		"	border-top: none;\n"
+		"	border-bottom: none;\n"
 		"}\n\n"
+
+		// Each cell is padded on the left except the first one on each row
+		//"tr td:first-child {\n"
+		//"	padding-left: 0;\n"
+		//"}\n\n"
 
 		// Paragraphs after tables
 		"table + p {\n"

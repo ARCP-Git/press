@@ -91,6 +91,7 @@ typedef struct
 {
 	uint32_t		width;
 	uint32_t		height;
+	uint32_t		header_row_count;
 	document_cell	cells[];
 } document_table;
 

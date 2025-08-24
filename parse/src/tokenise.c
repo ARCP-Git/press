@@ -433,6 +433,7 @@ static bool check_dash(tokenise_context* ctx, char c)
 			if (peek_char(ctx, &peek) == '-')
 			{
 				peek_apply(ctx, &peek);
+				++ctx->current_line->length;
 				put_text_token(ctx, text_token_type_em_dash);
 
 				if (peek_char(ctx, &peek) == '-')
@@ -441,6 +442,7 @@ static bool check_dash(tokenise_context* ctx, char c)
 			else
 			{
 				get_char(ctx);
+				++ctx->current_line->length;
 				put_text_token(ctx, text_token_type_en_dash);
 			}
 
@@ -957,39 +959,66 @@ static char tokenise_comment(tokenise_context* ctx, char c)
 
 static char tokenise_table_row(tokenise_context* ctx, char c)
 {
-	add_line_token(ctx, line_token_type_table_row);
-
 	c = get_char(ctx);
-	for (;;)
+	if (c == '-')
 	{
-		if (c != ' ')
-			handle_tokenise_error(ctx, "Interior of table cells must be padded with a space character.");
+		add_line_token(ctx, line_token_type_table_header_delimiter_row);
 
-		// Consume space
-		do
+		for (;;)
 		{
-			c = get_char(ctx);
-		} while (c == ' ');
+			if (c != '-')
+				handle_tokenise_error(ctx, "Table header delimiters may only contain hyphen '-' characters surrounded by table cell characters '|'.");
 
-		add_line_token(ctx, line_token_type_table_cell);
-
-		if (c == '|')
-		{
-			c = get_char(ctx);
-		}
-		else
-		{
-			c = tokenise_text(ctx, c, true);
-
-			while (c == '|')
+			// Consume hyphens
+			do
 			{
-				add_line_token(ctx, line_token_type_table_merge);
+				c = get_char(ctx);
+			} while (c == '-');
+
+			add_line_token(ctx, line_token_type_table_header_delimiter_cell);
+
+			if (c == '|')
+				c = get_char(ctx);
+
+			if (c == '\n')
+				return get_char(ctx);
+		}
+	}
+	else
+	{
+		add_line_token(ctx, line_token_type_table_row);
+
+		for (;;)
+		{
+			if (c != ' ')
+				handle_tokenise_error(ctx, "Interior of table cells must be padded with a space character.");
+
+			// Consume space
+			do
+			{
+				c = get_char(ctx);
+			} while (c == ' ');
+
+			add_line_token(ctx, line_token_type_table_cell);
+
+			if (c == '|')
+			{
 				c = get_char(ctx);
 			}
-		}
+			else
+			{
+				c = tokenise_text(ctx, c, true);
 
-		if (c == '\n')
-			return get_char(ctx);
+				while (c == '|')
+				{
+					add_line_token(ctx, line_token_type_table_merge);
+					c = get_char(ctx);
+				}
+			}
+
+			if (c == '\n')
+				return get_char(ctx);
+		}
 	}
 }
 

@@ -135,17 +135,29 @@ static line_token* finalise_table(finalise_context* ctx, line_token* token)
 
 	uint32_t row_count = 0;
 	uint32_t column_count = 0;
+	uint32_t header_row_count = 0;
 
 	while (token->type != line_token_type_newline)
 	{
-		++row_count;
-		column_count = 0;
-
-		token = finalise_peek_next_token(ctx, &peek);
-		while (token->type == line_token_type_table_cell || token->type == line_token_type_table_merge)
+		if (token->type == line_token_type_table_row)
 		{
-			++column_count;
+			++row_count;
+			column_count = 0;
+
 			token = finalise_peek_next_token(ctx, &peek);
+			while (token->type == line_token_type_table_cell || token->type == line_token_type_table_merge)
+			{
+				++column_count;
+				token = finalise_peek_next_token(ctx, &peek);
+			}
+		}
+		else if (token->type == line_token_type_table_header_delimiter_row)
+		{
+			header_row_count = row_count;
+
+			token = finalise_peek_next_token(ctx, &peek);
+			while (token->type == line_token_type_table_header_delimiter_cell)
+				token = finalise_peek_next_token(ctx, &peek);
 		}
 	}
 
@@ -153,6 +165,7 @@ static line_token* finalise_table(finalise_context* ctx, line_token* token)
 	element->table = (document_table*)mem_alloc(size);
 	element->table->width = column_count;
 	element->table->height = row_count;
+	element->table->header_row_count = header_row_count;
 
 	int32_t i = -1;
 	uint32_t span_count = 1;
@@ -181,6 +194,12 @@ static line_token* finalise_table(finalise_context* ctx, line_token* token)
 		}
 
 		token = finalise_get_next_token(ctx);
+		if (token->type == line_token_type_table_header_delimiter_row)
+		{
+			token = finalise_get_next_token(ctx);
+			while (token->type == line_token_type_table_header_delimiter_cell)
+				token = finalise_get_next_token(ctx);
+		}
 	}
 
 	return token;
