@@ -242,9 +242,11 @@ static void output_css(html_context* ctx)
 		"	vertical-align: top;\n"
 		"}\n\n"
 
-		"th:empty {\n"
+		"th:empty, td:empty {\n"
 		"	border-top: none;\n"
 		"	border-bottom: none;\n"
+		"	border-left: none;\n"
+		"	border-right: none;\n"
 		"}\n\n"
 
 		// Each cell is padded on the left except the first one on each row

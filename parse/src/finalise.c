@@ -163,6 +163,7 @@ static line_token* finalise_table(finalise_context* ctx, line_token* token)
 
 	const int64_t size = sizeof(document_table) + (sizeof(document_cell) * row_count * column_count);
 	element->table = (document_table*)mem_alloc(size);
+	memset(element->table, 0x00, size);
 	element->table->width = column_count;
 	element->table->height = row_count;
 	element->table->header_row_count = header_row_count;
@@ -179,13 +180,10 @@ static line_token* finalise_table(finalise_context* ctx, line_token* token)
 			{
 				i += span_count;
 				span_count = 1;
-				element->table->cells[i].alignment = document_align_left;
 				element->table->cells[i].column_span = 1;
 
 				if (token->length)
 					element->table->cells[i].text_element = token->text;
-				else
-					element->table->cells[i].text_element = nullptr;
 			}
 			else if (token->type == line_token_type_table_merge)
 			{
@@ -197,6 +195,7 @@ static line_token* finalise_table(finalise_context* ctx, line_token* token)
 		token = finalise_get_next_token(ctx);
 		if (token->type == line_token_type_table_header_delimiter_row)
 		{
+			// Set the alignment of each column in the first row
 			for (uint32_t i = 0; i < column_count; ++i)
 			{
 				token = finalise_get_next_token(ctx);
@@ -204,12 +203,15 @@ static line_token* finalise_table(finalise_context* ctx, line_token* token)
 					element->table->cells[i].alignment = document_align_right;
 				else if (token->type == line_token_type_table_header_align_centre)
 					element->table->cells[i].alignment = document_align_centre;
+				else
+					element->table->cells[i].alignment = document_align_left;
 			}
 
 			token = finalise_get_next_token(ctx);
 		}
 	}
 
+	// Copy first row alignments into every row
 	i = 0;
 	for (uint32_t y = 0; y < row_count; ++y)
 	{
