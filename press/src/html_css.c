@@ -76,6 +76,7 @@ static void output_css(html_context* ctx)
 		// Right-aligned paragraphs
 		"p.right-aligned {\n"
 		"	margin-top: 1em;\n"
+		"	margin-bottom: 1em;\n"
 		"	text-align: right;\n"
 		"	text-indent: 0;\n"
 		"}\n\n"
@@ -83,9 +84,9 @@ static void output_css(html_context* ctx)
 		// Centre-aligned paragraphs
 		"p.centre-aligned {\n"
 		"	margin-top: 1em;\n"
+		"	margin-bottom: 1em;\n"
 		"	text-align: center;\n"
 		"	text-indent: 0;\n"
-		"	margin-bottom: 1em;\n"
 		"}\n\n"
 
 		// Paragraphs following aligned are not indented
