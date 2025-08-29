@@ -375,27 +375,138 @@ static void create_docx_styles(void)
 	close_file(f);
 }
 
-static void create_docx_numbering(void)
+static void create_docx_numbering(const document* doc, int* unordered, int* roman, int* arabic, int* letter)
 {
 	file f = open_file(OUTPUT_DIR "/docx/word/numbering.xml", file_mode_write);
 
 	print_str(f,
 		"<w:numbering xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\">\n"
+
+		// Unordered list
 		"\t<w:abstractNum w:abstractNumId=\"0\">\n"
-		"\t\t<w:nsid w:val=\"5DF9545D\"/>\n"
 		"\t\t<w:multiLevelType w:val=\"singleLevel\"/>\n"
-		"\t\t<w:tmpl w:val=\"76B45018\"/>\n"
 		"\t\t<w:lvl w:ilvl=\"0\">\n"
 		"\t\t\t<w:start w:val=\"1\"/>\n"
-		"\t\t\t<w:numFmt w:val=\"decimal\"/>\n"
-		"\t\t\t<w:lvlText w:val=\"%1.\"/>\n"
+		"\t\t\t<w:numFmt w:val=\"bullet\"/>\n"
+		"\t\t\t<w:lvlText w:val=\"\uF0B7\"/>\n"
+		"\t\t\t<w:rPr>\n"
+		"\t\t\t\t<w:rFonts w:ascii=\"Symbol\" w:hAnsi=\"Symbol\"/>\n"
+		"\t\t\t</w:rPr>\n"
 		"\t\t</w:lvl>\n"
 		"\t</w:abstractNum>\n"
-		"\t<w:num w:numId=\"1\">\n"
-		"\t\t<w:abstractNumId w:val=\"0\"/>\n"
-		"\t</w:num>\n"
-		"</w:numbering>"
 	);
+
+	/*
+		A brief explanation of this complexity. The Word document format seems to require a new list
+		type in order to restart numbering. This is what Word does itself. This does not affect
+		unordered lists because they are not numbered.
+	*/
+	const int unordered_count = 1;
+	int roman_count = 0;
+	int arabic_count = 0;
+	int letter_count = 0;
+
+	// TODO: We could calculate this during validation or finalising
+	for (uint32_t chapter_index = 0; chapter_index < doc->chapter_count; ++chapter_index)
+	{
+		document_chapter* chapter = &doc->chapters[chapter_index];
+
+		for (uint32_t element_index = 0; element_index < chapter->element_count; ++element_index)
+		{
+			document_element* element = &chapter->elements[element_index];
+
+			switch (element->type)
+			{
+				case document_element_type_ordered_list_begin_roman:
+					++roman_count;
+					break;
+				case document_element_type_ordered_list_begin_arabic:
+					++arabic_count;
+					break;
+				case document_element_type_ordered_list_begin_letter:
+					++letter_count;
+					break;
+			}
+		}
+	}
+
+	// TODO: Add paranoid error checks of these ranges
+	const int unordered_begin = 0;
+	const int unordered_end = unordered_begin + unordered_count;
+	const int roman_begin = unordered_end;
+	const int roman_end = roman_begin + roman_count;
+	const int arabic_begin = roman_end;
+	const int arabic_end = arabic_begin + arabic_count;
+	const int letter_begin = arabic_end;
+	const int letter_end = letter_begin + letter_count;
+	const int total_count = letter_end;
+
+	// Number types seem to start at 1, but could possibly be arbitrary?
+	*unordered = unordered_begin + 1;
+	*roman = roman_begin + 1;
+	*arabic = arabic_begin + 1;
+	*letter = letter_begin + 1;
+
+	// Roman lists
+	for (int i = roman_begin; i < roman_end; ++i)
+	{
+		print_fmt(f,
+			"\t<w:abstractNum w:abstractNumId=\"%d\">\n"
+			"\t\t<w:multiLevelType w:val=\"singleLevel\"/>\n"
+			"\t\t<w:lvl w:ilvl=\"0\">\n"
+			"\t\t\t<w:start w:val=\"1\"/>\n"
+			"\t\t\t<w:numFmt w:val=\"lowerRoman\"/>\n"
+			"\t\t\t<w:lvlText w:val=\"%%1.\"/>\n"
+			"\t\t</w:lvl>\n"
+			"\t</w:abstractNum>\n",
+			i
+		);
+	}
+
+	// Arabic lists
+	for (int i = arabic_begin; i < arabic_end; ++i)
+	{
+		print_fmt(f,
+			"\t<w:abstractNum w:abstractNumId=\"%d\">\n"
+			"\t\t<w:multiLevelType w:val=\"singleLevel\"/>\n"
+			"\t\t<w:lvl w:ilvl=\"0\">\n"
+			"\t\t\t<w:start w:val=\"1\"/>\n"
+			"\t\t\t<w:numFmt w:val=\"decimal\"/>\n"
+			"\t\t\t<w:lvlText w:val=\"%%1.\"/>\n"
+			"\t\t</w:lvl>\n"
+			"\t</w:abstractNum>\n",
+			i
+		);
+	}
+
+	// Letter lists
+	for (int i = letter_begin; i < letter_end; ++i)
+	{
+		print_fmt(f,
+			"\t<w:abstractNum w:abstractNumId=\"%d\">\n"
+			"\t\t<w:multiLevelType w:val=\"singleLevel\"/>\n"
+			"\t\t<w:lvl w:ilvl=\"0\">\n"
+			"\t\t\t<w:start w:val=\"1\"/>\n"
+			"\t\t\t<w:numFmt w:val=\"lowerLetter\"/>\n"
+			"\t\t\t<w:lvlText w:val=\"%%1.\"/>\n"
+			"\t\t</w:lvl>\n"
+			"\t</w:abstractNum>\n",
+			i
+		);
+	}
+
+	for (int i = 0; i < total_count; ++i)
+	{
+		print_fmt(f,
+			"\t<w:num w:numId=\"%d\">\n"
+			"\t\t<w:abstractNumId w:val=\"%d\"/>\n"
+			"\t</w:num>\n",
+			i + 1,
+			i
+		);
+	}
+
+	print_str(f, "</w:numbering>");
 
 	close_file(f);
 }
@@ -492,7 +603,7 @@ static void print_docx_text_block(file f, const char* text, bool citation)
 	end_docx_text_run(f, type);
 }
 
-static void create_docx_document(const document* doc)
+static void create_docx_document(const document* doc, int unordered, int roman, int arabic, int letter)
 {
 	file f = open_file(OUTPUT_DIR "/docx/word/document.xml", file_mode_write);
 
@@ -503,6 +614,7 @@ static void create_docx_document(const document* doc)
 	);
 
 	int depth = 2;
+	int list_type;
 	int paragraph_count = 0;
 	bool inside_block_quote = false;
 
@@ -595,15 +707,31 @@ static void create_docx_document(const document* doc)
 				print_docx_text_block(f, element->text, true);
 				print_str(f, "\t\t</w:p>\n");
 				break;
+			case document_element_type_unordered_list_begin:
+				paragraph_count = 0;
+				list_type = unordered;
+				break;
+			case document_element_type_ordered_list_begin_roman:
+				paragraph_count = 0;
+				list_type = roman++;
+				break;
 			case document_element_type_ordered_list_begin_arabic:
 				paragraph_count = 0;
+				list_type = arabic++;
+				break;
+			case document_element_type_ordered_list_begin_letter:
+				paragraph_count = 0;
+				list_type = letter++;
+				break;
+			case document_element_type_unordered_list_end:
 				break;
 			case document_element_type_ordered_list_end:
 				break;
 			case document_element_type_list_item:
-				print_str(f,
+				print_fmt(f,
 					"\t\t<w:p>\n"
-					"\t\t\t<w:pPr><w:pStyle w:val=\"ListParagraph\"/></w:pPr>\n"
+					"\t\t\t<w:pPr><w:pStyle w:val=\"ListParagraph\"/><w:numPr><w:numId w:val=\"%d\"/></w:numPr></w:pPr>\n",
+					list_type
 				);
 				print_docx_text_block(f, element->text, false);
 				print_str(f, "\t\t</w:p>\n");
@@ -633,13 +761,18 @@ static void generate_docx(const document* doc)
 	create_dir(OUTPUT_DIR "\\docx\\word");
 	create_dir(OUTPUT_DIR "\\docx\\word\\_rels");
 
+	int unordered;
+	int roman;
+	int arabic;
+	int letter;
+
 	create_docx_content_types();
 	create_docx_rels();
 	create_docx_doc_rels();
 	create_docx_settings();
 	create_docx_styles();
-	create_docx_numbering();
-	create_docx_document(doc);
+	create_docx_numbering(doc, &unordered, &roman, &arabic, &letter);
+	create_docx_document(doc, unordered, roman, arabic, letter);
 
 	// The following two arrays MUST be in sync
 	const char* inputs[] = {
