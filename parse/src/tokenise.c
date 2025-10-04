@@ -5,6 +5,40 @@ typedef enum
 	emphasis_state_emphasis
 } emphasis_state;
 
+static const char* line_token_type_strings[] = {
+	"line_token_type_none",
+	"line_token_type_eof",
+	"line_token_type_note",
+	"line_token_type_dinkus",
+	"line_token_type_newline",
+	"line_token_type_paragraph",
+	"line_token_type_heading_1",
+	"line_token_type_heading_2",
+	"line_token_type_heading_3",
+	"line_token_type_heading_4",
+	"line_token_type_heading_5",
+	"line_token_type_preformatted",
+	"line_token_type_right_aligned",
+	"line_token_type_centre_aligned",
+	"line_token_type_block_newline",
+	"line_token_type_unordered_list",
+	"line_token_type_block_citation",
+	"line_token_type_block_paragraph",
+	"line_token_type_paragraph_break",
+	"line_token_type_ordered_list_roman",
+	"line_token_type_ordered_list_arabic",
+	"line_token_type_ordered_list_letter",
+	"line_token_type_table_row",
+	"line_token_type_table_cell",
+	"line_token_type_table_merge",
+	"line_token_type_table_header_delimiter_row",
+	"line_token_type_table_header_align_left",
+	"line_token_type_table_header_align_right",
+	"line_token_type_table_header_align_centre",
+	"line_token_type_admonition"
+};
+static_assert(sizeof(line_token_type_strings) / sizeof(const char*) == line_token_type_count);
+
 static void handle_loc_error(uint32_t line, uint32_t column, const char* format, ...)
 {
 	print_error("Parsing error (line %u, column %u): ", line, column);
@@ -63,6 +97,11 @@ static line_token* add_line_token(tokenise_context* ctx, line_token_type type)
 
 	++ctx->line_count;
 	ctx->current_line = line;
+
+	// TODO: Add as a general debug feature
+#if 0
+	printf("%s\n", line_token_type_strings[type]);
+#endif
 
 	return line;
 }
@@ -705,6 +744,30 @@ static char tokenise_heading(tokenise_context* ctx, char c)
 	return tokenise_text(ctx, c, false);
 }
 
+static char tokenise_admonition(tokenise_context* ctx, char c)
+{
+	peek_state peek;
+	peek_init(ctx, &peek);
+
+	char peeked_char = peek_char(ctx, &peek);
+	if (peeked_char == ':')
+	{
+		peeked_char = peek_char(ctx, &peek);
+		peek_apply(ctx, &peek);
+		add_line_token(ctx, line_token_type_admonition);
+
+		// Title is optional
+		if (peeked_char == '\n')
+			return get_char(ctx);
+		else if (peeked_char == ' ')
+			return tokenise_text(ctx, get_char(ctx), false);
+		else
+			handle_tokenise_error(ctx, "Admonitions \"::\" must be followed by a newline or title after a space.");
+	}
+
+	return tokenise_paragraph(ctx, c, false);
+}
+
 static char tokenise_ordered_list_arabic(tokenise_context* ctx, char c)
 {
 	peek_state peek;
@@ -1106,6 +1169,8 @@ static void tokenise(char* data, line_tokens* out_tokens, document_metadata* met
 			c = tokenise_newline(&ctx, c, false);
 		else if (c == '#')
 			c = tokenise_heading(&ctx, c);
+		else if (c == ':')
+			c = tokenise_admonition(&ctx, c);
 		else if (c == '*')
 			c = tokenise_unordered_list(&ctx, c);
 		else if (c >= '1' && c <= '9')

@@ -26,6 +26,32 @@ static void output_css(html_context* ctx)
 		"	overflow-wrap: break-word;\n"
 		"}\n\n"
 
+		"aside {\n"
+		"	outline: solid;\n"
+		"	margin-top: 1em;\n"
+		"	margin-bottom: 1em;\n"
+		"	padding: 1em;\n"
+		"}\n\n"
+
+		"aside p {\n"
+		"	text-indent: 0;\n"
+		"}\n\n"
+
+		"aside h1 {\n"
+		"	font-size: 18px;\n"
+		"	text-align: left;\n"
+		"	margin-top: 0;\n"
+		"}\n\n"
+
+		"aside p + p {\n"
+		"	text-indent: 1.5em;\n"
+		"}\n\n"
+
+		// Paragraphs following asides are not indented
+		"aside + p {\n"
+		"	text-indent: 0;\n"
+		"}\n\n"
+
 		// Chapter headings are centred
 		"h1 {\n"
 		"	text-align: center;\n"

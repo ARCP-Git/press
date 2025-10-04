@@ -390,6 +390,20 @@ static void generate_html(const document* doc)
 				print_html_text_block(&ctx, element->text);
 				print_str(f, "</li>");
 				break;
+			case document_element_type_admonition_begin:
+				print_tabs(f, depth++);
+				print_str(f, "<aside>");
+				break;
+			case document_element_type_admonition_end:
+				print_tabs(f, --depth);
+				print_str(f, "</aside>");
+				break;
+			case document_element_type_admonition_title:
+				print_tabs(f, depth);
+				print_str(f, "<h1>");
+				print_html_text_block(&ctx, element->text);
+				print_str(f, "</h1>");
+				break;
 			}
 		}
 

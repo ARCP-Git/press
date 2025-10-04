@@ -18,6 +18,38 @@ typedef struct
 	bool				within_note;
 } finalise_context;
 
+static const char* document_element_type_strings[] = {
+	"document_element_type_table",
+	"document_element_type_dinkus",
+	"document_element_type_heading_1",
+	"document_element_type_heading_2",
+	"document_element_type_heading_3",
+	"document_element_type_heading_4",
+	"document_element_type_heading_5",
+	"document_element_type_list_item",
+	"document_element_type_text_block",
+	"document_element_type_line_break",
+	"document_element_type_preformatted",
+	"document_element_type_paragraph_end",
+	"document_element_type_blockquote_end",
+	"document_element_type_paragraph_begin",
+	"document_element_type_blockquote_begin",
+	"document_element_type_ordered_list_end",
+	"document_element_type_unordered_list_end",
+	"document_element_type_blockquote_citation",
+	"document_element_type_right_aligned_begin",
+	"document_element_type_centre_aligned_begin",
+	"document_element_type_unordered_list_begin",
+	"document_element_type_paragraph_break_begin",
+	"document_element_type_ordered_list_begin_roman",
+	"document_element_type_ordered_list_begin_arabic",
+	"document_element_type_ordered_list_begin_letter",
+	"document_element_type_admonition_begin",
+	"document_element_type_admonition_end",
+	"document_element_type_admonition_title"
+};
+static_assert(sizeof(document_element_type_strings) / sizeof(const char*) == document_element_type_count);
+
 static line_token* finalise_peek_next_token(finalise_context* ctx, uint32_t* token_index)
 {
 	assert(*token_index < ctx->token_count);
@@ -38,6 +70,11 @@ static line_token* finalise_get_next_token(finalise_context* ctx)
 static document_element* finalise_add_element(finalise_context* ctx, document_element_type type, const char* text)
 {
 	document_element* element;
+
+	// TODO: Add as a general debug feature
+#if 0
+	printf("%s\n", document_element_type_strings[type]);
+#endif
 
 	if (ctx->within_note)
 	{
@@ -367,6 +404,29 @@ static line_token* finalise_blockquote(finalise_context* ctx, line_token* token)
 	return token;
 }
 
+static line_token* finalise_admonition(finalise_context* ctx, line_token* token)
+{
+	finalise_add_element(ctx, document_element_type_admonition_begin, nullptr);
+
+	if (token->length > 0)
+		finalise_add_element(ctx, document_element_type_admonition_title, token->text);
+
+	token = finalise_get_next_token(ctx);
+	for (;;)
+	{
+		if (token->type == line_token_type_newline)
+			token = finalise_get_next_token(ctx);
+		else if (token->type == line_token_type_paragraph)
+			token = finalise_paragraph(ctx, token);
+		else if (token->type == line_token_type_admonition)
+			break;
+	}
+
+	finalise_add_element(ctx, document_element_type_admonition_end, nullptr);
+
+	return finalise_get_next_token(ctx);
+}
+
 static line_token* finalise_ordered_list(finalise_context* ctx, line_token* token, line_token_type line_type, document_element_type doc_type)
 {
 	finalise_add_element(ctx, doc_type, nullptr);
@@ -509,6 +569,9 @@ static void finalise(line_tokens* tokens, const doc_mem_req* mem_req, document* 
 			break;
 		case line_token_type_table_row:
 			token = finalise_table(&ctx, token);
+			break;
+		case line_token_type_admonition:
+			token = finalise_admonition(&ctx, token);
 			break;
 		default:
 			token = finalise_get_next_token(&ctx);

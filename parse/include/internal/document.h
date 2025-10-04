@@ -51,7 +51,11 @@ typedef enum
 	document_element_type_paragraph_break_begin,
 	document_element_type_ordered_list_begin_roman,
 	document_element_type_ordered_list_begin_arabic,
-	document_element_type_ordered_list_begin_letter
+	document_element_type_ordered_list_begin_letter,
+	document_element_type_admonition_begin,
+	document_element_type_admonition_end,
+	document_element_type_admonition_title,
+	document_element_type_count
 } document_element_type;
 
 typedef enum

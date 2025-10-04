@@ -339,6 +339,38 @@ static line_token* validate_blockquote(validate_context* ctx, line_token* token)
 	return token;
 }
 
+static line_token* validate_admonition(validate_context* ctx, line_token* token)
+{
+	// admonition_begin
+	// admonition end
+	ctx->element_count += 2;
+
+	// Title is optional
+	// adminition title
+	if (token->length > 0)
+		++ctx->element_count;
+
+	token = validate_get_next_token(ctx);
+	if (token->type != line_token_type_newline)
+		handle_validate_error(ctx, "Admonitions \"::\" must be followed by a blank line.");
+
+	token = validate_get_next_token(ctx);
+	for (;;)
+	{
+		switch (token->type)
+		{
+		case line_token_type_paragraph:
+			token = validate_paragraph(ctx, token, &ctx->element_count);
+			break;
+		case line_token_type_admonition:
+			if (token->length > 0)
+				handle_validate_error(ctx, "Admonition end tags \"::\" must be followed by a new line.");
+			
+			return validate_get_next_token(ctx);
+		}
+	}
+}
+
 static line_token* validate_ordered_list(validate_context* ctx, line_token* token, line_token_type type)
 {
 	ctx->element_count += 3;
@@ -461,6 +493,10 @@ static void validate(line_tokens* tokens, doc_mem_req* out_mem_req)
 			break;
 		case line_token_type_table_row:
 			token = validate_table(&ctx, &ctx.element_count);
+			break;
+		case line_token_type_admonition:
+			token = validate_admonition(&ctx, token);
+			break;
 		default:
 			token = validate_get_next_token(&ctx);
 		}

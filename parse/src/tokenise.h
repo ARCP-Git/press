@@ -29,7 +29,9 @@ typedef enum
 	line_token_type_table_header_delimiter_row,
 	line_token_type_table_header_align_left,
 	line_token_type_table_header_align_right,
-	line_token_type_table_header_align_centre
+	line_token_type_table_header_align_centre,
+	line_token_type_admonition,
+	line_token_type_count
 } line_token_type;
 
 typedef struct
