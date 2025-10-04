@@ -133,10 +133,10 @@ static const char* generate_url_path(const char* title, const char* ext)
 
 static void generate_html(const document* doc)
 {
-	// Filepath mem is temporary
-	// TODO: Use filename override
+	// File path mem is temporary
 	void* frame = mem_push();
-	const char* filepath = generate_url_path(doc->metadata.title, "html");
+	const char* filename = doc->metadata.filename ? doc->metadata.filename : doc->metadata.title;
+	const char* filepath = generate_url_path(filename, "html");
 	file f = open_file(filepath, file_mode_write);
 	mem_pop(frame);
 
