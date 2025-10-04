@@ -507,6 +507,7 @@ static char tokenise_text(tokenise_context* ctx, char c, bool within_table)
 		{
 			c = get_char(ctx);
 			if (
+				c == '/' ||
 				c == '{' ||
 				c == '[' ||
 				c == '<' ||

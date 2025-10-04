@@ -20,6 +20,10 @@ void print_char_token(file f, char c)
 {
 	switch (c)
 	{
+	//case '/':
+	//	print_char(f, '/');
+	//	print_line_separator(f);
+	//	break;
 	case text_token_type_en_dash:
 		print_en_dash(f);
 		break;
@@ -132,6 +136,13 @@ void print_quote_level_2_end(file f)
 	print_char(f, 0xE2);
 	print_char(f, 0x80);
 	print_char(f, 0x99);
+}
+
+void print_line_separator(file f)
+{
+	print_char(f, 0xE2);
+	print_char(f, 0x80);
+	print_char(f, 0x8B);
 }
 
 void print_simple_text(file f, const char* text)

@@ -12,4 +12,5 @@ void print_quote_level_1_begin(file f);
 void print_quote_level_1_end(file f);
 void print_quote_level_2_begin(file f);
 void print_quote_level_2_end(file f);
+void print_line_separator(file f);
 void print_simple_text(file f, const char* text);
