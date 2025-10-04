@@ -517,6 +517,7 @@ static char tokenise_text(tokenise_context* ctx, char c, bool within_table)
 				c == 'I' ||
 				c == 'V' ||
 				c == 'X' ||
+				c == '_' ||
 				(c >= '1' && c <= '9') ||
 				(c >= 'a' && c <= 'z')
 			)

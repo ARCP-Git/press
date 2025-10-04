@@ -22,6 +22,8 @@ static void output_css(html_context* ctx)
 		"	padding-left: 1em;\n"
 		"	padding-right: 1em;\n"
 		"	padding-bottom: 1em;\n"
+		// Prevents very long links from extending the page size
+		"	overflow-wrap: break-word;\n"
 		"}\n\n"
 
 		// Chapter headings are centred
