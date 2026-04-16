@@ -96,6 +96,10 @@ static const char* generate_url_path(const char* title, const char* ext)
 		{
 			p = *current++ = c + 32; // Make lowercase
 		}
+		else if (c >= '0' && c <= '9')
+		{
+			p = *current++ = c;
+		}
 		else if (c == '.')
 		{
 			p = *current++ = '.';
